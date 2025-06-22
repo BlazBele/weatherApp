@@ -1,0 +1,62 @@
+import { Component, OnInit } from '@angular/core';
+import { WeatherData } from '../../../interfaces/weather-data';
+import { SupabaseService } from '../../../services/api/supabase.service';
+import { FlaskService} from '../../../services/api/flask.service';
+import { firstValueFrom } from 'rxjs';
+import { WindData } from '../../../interfaces/wind-data';
+import { TimestampService } from '../../../services/timestamp.service';
+
+@Component({
+  selector: 'app-home',
+  standalone: false,
+  templateUrl: './home.component.html',
+  styleUrls: ['./home.component.scss']
+})
+export class HomeComponent implements OnInit {
+  weather: WeatherData = {
+    temperature: 0,
+    humidity: 0,
+    pressure0: 0,
+    wind_speed: 0,
+    wind_direction: '',
+    timestamp: '',
+    created_at: ''
+  };
+
+  constructor(
+    private supabaseService: SupabaseService,
+    private apiService: FlaskService,
+    private timestampService: TimestampService
+  ) {}
+
+  ngOnInit(): void {
+    this.loadWeatherFromSupabase();
+  }
+
+loadWeatherFromSupabase(): void {
+  this.supabaseService.getWeatherData().subscribe(data => {
+    //console.log('Prejeto iz Supabase:', data);
+    if (data) {
+      const formattedCreatedAt = this.timestampService.formatDateString(data.created_at);
+      this.weather = {
+        ...data,
+        created_at: formattedCreatedAt,
+      };
+    }
+    //console.log(data);
+  });
+}
+
+  async refreshWindData(): Promise<void> {
+    try {
+      const wind: WindData = await firstValueFrom(this.apiService.getWindData());
+      const timestamp = this.timestampService.getFormattedTimestamp();
+      this.weather.timestamp = timestamp;
+      this.weather.wind_speed = wind.wind_speed;
+      this.weather.wind_direction = wind.wind_direction;
+      //console.log(this.weather.wind_speed, this.weather.wind_direction )
+    } catch (error) {
+      console.error('Napaka pri osvežitvi vetra:', error);
+    }
+  }
+}

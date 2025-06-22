@@ -1,0 +1,9 @@
+{
+    "home" : "Home",
+    "temperature" : "Temperature",
+    "humidity" : "Humidity",
+    "pressure" : "Pressure",
+    "windSpeed" : "Wind speed",
+    "windDirection" : "Wind direciton",
+    "updated" : "Updated"
+}

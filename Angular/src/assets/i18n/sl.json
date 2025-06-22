@@ -1,0 +1,10 @@
+{
+    "home" : "Domov",
+    "temperature" : "Temperatura",
+    "humidity" : "Vlaga",
+    "pressure" : "Tlak",
+    "windSpeed" : "Hitrost vetra",
+    "windDirection" : "Smer vetra",
+    "updated" : "Posodobljeno"
+
+}
