@@ -255,11 +255,6 @@ async def train_model():
 
 @app.post("/predict", response_model=PredictionResult)
 async def predict_from_latest():
-    """
-    Napoved dežja za naslednje 3 ure na podlagi zadnjih meritev.
-    
-    Pridobi zadnjih 9 meritev iz Supabase, pripravi podatke in naredi napoved.
-    """
     try:
         last_9_records = get_last_9_records()
         prediction_data = prepare_prediction_data(last_9_records)
@@ -271,11 +266,6 @@ async def predict_from_latest():
 
 @app.get("/model/status")
 async def model_status():
-    """
-    Preveri, ali je model usposobljen in na voljo za napovedovanje.
-    
-    Vrne informacije o poti do modela in podatkov.
-    """
     model = load_model()
     return {
         "model_loaded": model is not None,
@@ -284,7 +274,7 @@ async def model_status():
         "timestamp": datetime.datetime.now()
     }
 
-# --- Main Function (for standalone use) ---
+
 if __name__ == "__main__":
     import uvicorn
     uvicorn.run(app, host="0.0.0.0", port=8000)
