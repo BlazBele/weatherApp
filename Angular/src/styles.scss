@@ -8,6 +8,7 @@
   --bs-dark: #121212;         // Zelo temna siva
   --bs-light: #3d3d3d;        // Svetlejša siva
   --bs-red: #e90a0a; 
+  --bs-select: yellow;
 
   .navbar {
     background-color: var(--bs-dark) !important;
@@ -54,6 +55,9 @@
   --bs-secondary: #9a9a9a;    // Svetlejša siva
   --bs-dark: #d0d0d0;         // Zelo svetla siva
   --bs-light: #ffffff;        // Bela
+  --bs-black: #000000;
+  --bs-select: #5a5a5a;
+
 
   .navbar {
     background-color: var(--bs-dark) !important;
@@ -67,7 +71,7 @@
   }
 
   .nav-link, .navbar-brand {
-    color: var(--bs-primary) !important;
+    color: var(--bs-black) !important;
     &:hover {
       color: var(--bs-body-color) !important;
     }

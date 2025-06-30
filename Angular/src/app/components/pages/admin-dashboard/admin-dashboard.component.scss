@@ -1,0 +1,17 @@
+.light-theme, .nav-link{
+
+    &:hover{
+        color: var(--bs-select) !important;
+    }
+}
+
+.dark-theme, .nav-link{
+
+    &:hover{
+        color: var(--bs-select) !important;
+    }
+}
+
+.nav-pills {
+    --bs-nav-pills-link-active-bg: red;
+}

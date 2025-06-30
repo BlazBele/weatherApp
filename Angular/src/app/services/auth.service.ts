@@ -42,7 +42,7 @@ async login(email: string, password: string): Promise<any> {
 
   async logout() {
     await this.supabase.auth.signOut();
-    localStorage.removeItem('sb-lpzcyxyceoeycxfrpyab-auth-refresh-token');
+    localStorage.removeItem('sb-lpzcyxyceoeycxfrpyab-auth-token');
   }
 
   isLoggedInSync(): boolean {
