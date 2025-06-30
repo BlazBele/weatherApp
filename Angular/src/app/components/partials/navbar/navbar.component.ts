@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
 import { ThemeService } from '../../../services/theme.service';
+import { Router } from '@angular/router';
+import { AuthService } from '../../../services/auth.service';
 
 @Component({
   selector: 'app-navbar',
@@ -8,7 +10,7 @@ import { ThemeService } from '../../../services/theme.service';
   templateUrl: './navbar.component.html',
   styleUrl: './navbar.component.scss'
 })
-export class NavbarComponent implements OnInit {
+export class NavbarComponent {
   isDarkMode = false;
 
   selectedLanguage: { name: string, shortName: string, flag: string } = { 
@@ -24,10 +26,13 @@ export class NavbarComponent implements OnInit {
 
   constructor(
     private translateService: TranslateService, 
-    public themeService: ThemeService
+    public themeService: ThemeService,
+    private authService: AuthService, 
+    private router: Router,
+
   ) {}
 
-  ngOnInit(): void {
+  async ngOnInit(): Promise<void> {
     const lang = localStorage.getItem('lang') || 'sl';
     this.setLanguage(lang);
     
@@ -45,5 +50,14 @@ export class NavbarComponent implements OnInit {
 
   selectLanguage(language: string): void {
     this.setLanguage(language.toLowerCase());
+  }
+
+  get isLoggedIn(): boolean {
+    return this.authService.isLoggedInSync();
+  }
+
+  async logout() {
+    await this.authService.logout();
+    this.router.navigate(['/login']);
   }
 }

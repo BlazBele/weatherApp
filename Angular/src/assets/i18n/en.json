@@ -1,4 +1,12 @@
 {
+    "LOGIN": {
+        "login" : "Login",
+        "logout" : "Logout",
+        "password" : "Password",
+        "adminOnly" : "Login for administrator",
+        "invalidCredentials": "Invalid credentials.",
+        "accessDenied": "Access denied. Admins only."
+    },
     "home" : "Home",
     "temperature" : "Temperature",
     "humidity" : "Humidity",

@@ -1,4 +1,12 @@
 {
+    "LOGIN": {
+        "login" : "Prijavi se",
+        "logout" : "Odjavi se",
+        "adminOnly" : "Prijava za administratorja",
+        "password" : "Geslo",
+        "invalidCredentials": "Neveljavni podatki za prijavo.",
+        "accessDenied": "Dostop zavrnjen. Samo za administratorje."
+    },
     "home" : "Domov",
     "temperature" : "Temperatura",
     "humidity" : "Vlaga",
