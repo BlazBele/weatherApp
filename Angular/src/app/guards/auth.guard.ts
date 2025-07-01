@@ -10,7 +10,7 @@ export class AuthGuard implements CanActivate {
     const user = await this.authService.getCurrentUser();
 
     if (!user) {
-      console.log('🔐 Not logged in. Redirecting...');
+      console.log('Not logged in. Redirecting...');
       this.router.navigate(['/login']);
       return false;
     }
@@ -22,7 +22,7 @@ export class AuthGuard implements CanActivate {
       .single();
 
     if (error || !profile) {
-      console.warn('⚠️ Could not fetch profile or no role found.');
+      console.warn('Could not fetch profile or no role found.');
       this.router.navigate(['/login']);
       return false;
     }
