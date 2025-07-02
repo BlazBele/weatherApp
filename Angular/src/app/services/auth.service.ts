@@ -24,6 +24,7 @@ async login(email: string, password: string): Promise<any> {
     .eq('id', data.user.id)
     .single();
 
+    
   if (profileError) throw profileError;
 
   return {
@@ -33,8 +34,6 @@ async login(email: string, password: string): Promise<any> {
   };
 }
 
-
-  // Trenutni prijavljeni uporabnik
   async getCurrentUser() {
     const { data } = await this.supabase.auth.getUser();
     return data?.user || null;
@@ -48,5 +47,13 @@ async login(email: string, password: string): Promise<any> {
   isLoggedInSync(): boolean {
     return !!localStorage.getItem('sb-lpzcyxyceoeycxfrpyab-auth-token');
   }
+
+  registerBeforeUnloadListener() {
+  window.addEventListener('beforeunload', () => {
+    localStorage.removeItem('sb-lpzcyxyceoeycxfrpyab-auth-token');
+    this.supabase.auth.signOut().catch(() => {
+    });
+  });
+}
 
 }
