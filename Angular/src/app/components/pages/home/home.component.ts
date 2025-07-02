@@ -30,33 +30,35 @@ export class HomeComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.loadWeatherFromSupabase();
+    this.loadDailyWeatherSummary();
   }
 
-loadWeatherFromSupabase(): void {
-  this.supabaseService.getWeatherData().subscribe(data => {
-    //console.log('Prejeto iz Supabase:', data);
-    if (data) {
-      const formattedCreatedAt = this.timestampService.formatDateString(data.created_at);
-      this.weather = {
-        ...data,
-        created_at: formattedCreatedAt,
-      };
-    }
-    //console.log(data);
-  });
-}
+  loadDailyWeatherSummary(): void {
+    this.supabaseService.getDailyWeatherSummary().subscribe(data => {
+      if (data) {
+        // Formatiraj created_at če obstaja (trenutne podatke lahko formatiraš po potrebi)
+        const formattedCreatedAt = data.created_at 
+          ? this.timestampService.formatDateString(data.created_at) 
+          : '';
 
-  async refreshWindData(): Promise<void> {
-    try {
-      const wind: WindData = await firstValueFrom(this.apiService.getWindData());
-      const timestamp = this.timestampService.getFormattedTimestamp();
-      this.weather.timestamp = timestamp;
-      this.weather.wind_speed = wind.wind_speed;
-      this.weather.wind_direction = wind.wind_direction;
-      //console.log(this.weather.wind_speed, this.weather.wind_direction )
-    } catch (error) {
-      console.error('Napaka pri osvežitvi vetra:', error);
-    }
+        // Pripravi objekt weather s trenutnimi in dnevnim min/max podatki
+        this.weather = {
+          temperature: data.current_temperature,
+          humidity: data.current_humidity,
+          pressure0: data.current_pressure,
+          wind_speed: data.current_wind_speed,
+          wind_direction: data.current_wind_direction,
+          timestamp: data.timestamp || '',
+          created_at: formattedCreatedAt,
+
+          min_temperature: data.min_temperature,
+          max_temperature: data.max_temperature,
+          min_humidity: data.min_humidity,
+          max_humidity: data.max_humidity,
+          min_pressure: data.min_pressure,
+          max_pressure: data.max_pressure,
+          max_wind_speed: data.max_wind_speed
+        };
+      }
+    });
   }
-}
