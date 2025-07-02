@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, ElementRef, Input, OnChanges, SimpleChanges, ViewChild } from '@angular/core';
+import { AfterViewInit, ChangeDetectorRef, Component, ElementRef, Input, OnChanges, SimpleChanges, ViewChild } from '@angular/core';
 
 @Component({
   selector: 'app-trend-indicator',
@@ -19,6 +19,8 @@ export class TrendIndicatorComponent implements AfterViewInit, OnChanges {
   circleX: number = 0;
   circleY: number = 0;
 
+  constructor(private cdr: ChangeDetectorRef) {}
+
   get trend(): 'up' | 'down' | 'flat' {
     const diff = this.currentValue - this.previousValue;
     if (diff > 0.1) return 'up';
@@ -28,10 +30,11 @@ export class TrendIndicatorComponent implements AfterViewInit, OnChanges {
 
   ngAfterViewInit() {
     this.updateCirclePosition();
+    this.cdr.detectChanges(); // ✅ popravi NG0100 napako
   }
 
   ngOnChanges(changes: SimpleChanges) {
-    if (this.mainPath) {
+    if (this.mainPath?.nativeElement) {
       this.updateCirclePosition();
     }
   }
@@ -48,5 +51,4 @@ export class TrendIndicatorComponent implements AfterViewInit, OnChanges {
     this.circleX = point.x;
     this.circleY = point.y;
   }
-
 }

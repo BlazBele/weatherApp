@@ -1,24 +1,25 @@
 import { Injectable } from '@angular/core';
-import { createClient, SupabaseClient } from '@supabase/supabase-js';
-import { environment } from '../../environments/environment';
+import { SupabaseClientService } from './supabase-client.service';
+
+
+
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
-  public  supabase: SupabaseClient;
+  constructor(private supabaseClientService: SupabaseClientService) {}
 
-  constructor() {
-    this.supabase = createClient(environment.supabaseUrl, environment.supabaseApiKey);
+  get supabaseClient() {
+    return this.supabaseClientService.supabaseClient;
   }
 
-  // Prijava
 async login(email: string, password: string): Promise<any> {
-  const { data, error } = await this.supabase.auth.signInWithPassword({ email, password });
+  const { data, error } = await this.supabaseClient.auth.signInWithPassword({ email, password });
   if (error) throw error;
 
   // Pridobi profil uporabnika (vključno z role številko)
-  const { data: profile, error: profileError } = await this.supabase
+  const { data: profile, error: profileError } = await this.supabaseClient
     .from('profiles')
     .select('role')
     .eq('id', data.user.id)
@@ -35,12 +36,12 @@ async login(email: string, password: string): Promise<any> {
 }
 
   async getCurrentUser() {
-    const { data } = await this.supabase.auth.getUser();
+    const { data } = await this.supabaseClient.auth.getUser();
     return data?.user || null;
   }
 
   async logout() {
-    await this.supabase.auth.signOut();
+    await this.supabaseClient.auth.signOut();
     localStorage.removeItem('sb-lpzcyxyceoeycxfrpyab-auth-token');
   }
 
@@ -51,7 +52,7 @@ async login(email: string, password: string): Promise<any> {
   registerBeforeUnloadListener() {
   window.addEventListener('beforeunload', () => {
     localStorage.removeItem('sb-lpzcyxyceoeycxfrpyab-auth-token');
-    this.supabase.auth.signOut().catch(() => {
+    this.supabaseClient.auth.signOut().catch(() => {
     });
   });
 }

@@ -15,7 +15,7 @@ export class AuthGuard implements CanActivate {
       return false;
     }
 
-    const { data: profile, error } = await this.authService.supabase
+    const { data: profile, error } = await this.authService.supabaseClient
       .from('profiles')
       .select('role')
       .eq('id', user.id)
