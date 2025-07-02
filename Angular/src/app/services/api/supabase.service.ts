@@ -32,4 +32,22 @@ getWeatherData(): Observable<WeatherData | null> {
   );
 }
 
+getDailyWeatherSummary(): Observable<DailyWeatherSummary | null> {
+return from(
+  this.supabase
+    .from('DailyWeatherSummary')
+    .select('*')
+    .limit(1)
+    .single()
+    .then(({ data, error }) => {
+      if (error) {
+        console.error('Supabase error:', error.message);
+        return null;
+      }
+      return data;
+    })
+);
+
+  
+
 }
