@@ -14,40 +14,39 @@ export class SupabaseService {
     this.supabase = createClient(environment.supabaseUrl, environment.supabaseApiKey);
   }
 
-getWeatherData(): Observable<WeatherData | null> {
-  return from(
-    this.supabase
-      .from('VremenskiPodatki')
-      .select('*')
-      .order('created_at', { ascending: false })
-      .limit(1)
-      .single()
-      .then(({ data, error }) => {
-        if (error) {
-          console.error('Supabase error:', error.message);
-          return null;
-        }
-        return data
-      })
-  );
-}
+  getWeatherData(): Observable<WeatherData | null> {
+    return from(
+      this.supabase
+        .from('VremenskiPodatki')
+        .select('*')
+        .order('created_at', { ascending: false })
+        .limit(1)
+        .single()
+        .then(({ data, error }) => {
+          if (error) {
+            console.error('Supabase error:', error.message);
+            return null;
+          }
+          return data
+        })
+    );
+  }
 
-getDailyWeatherSummary(): Observable<DailyWeatherSummary | null> {
-return from(
-  this.supabase
-    .from('DailyWeatherSummary')
-    .select('*')
-    .limit(1)
-    .single()
-    .then(({ data, error }) => {
-      if (error) {
-        console.error('Supabase error:', error.message);
-        return null;
-      }
-      return data;
-    })
-);
-
-  
+  getDailyWeatherSummary(): Observable<WeatherData | null> {
+    return from(
+      this.supabase
+        .from('latest_and_previous_weather')
+        .select('*')
+        .limit(1)
+        .single()
+        .then(({ data, error }) => {
+          if (error) {
+            console.error('Supabase error:', error.message);
+            return null;
+          }
+          return data;
+        })
+    );
+  }
 
 }

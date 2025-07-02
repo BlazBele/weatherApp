@@ -1,17 +1,28 @@
 export interface WeatherData {
-  temperature: number;      
-  humidity: number;         
-  pressure0: number;        
-  wind_speed: number;      
-  wind_direction: string;   
+
+  temperature: number;
+  previous_temperature?: number;
+  daily_min_temperature?: number;
+  daily_max_temperature?: number;
+
+  humidity: number;
+  previous_humidity?: number;
+  daily_min_humidity?: number;
+  daily_max_humidity?: number;
+
+  pressure0: number;
+  previous_pressure0?: number;
+  daily_min_pressure0?: number;
+  daily_max_pressure0?: number;
+
+  wind_speed: number;
+  previous_wind_speed?: number;
+  daily_min_wind_speed?: number;
+  daily_max_wind_speed?: number;
+
+  wind_direction: string;
+  previous_wind_direction?: string;
+
   timestamp: string;
   created_at: string;
-  //Dnevni
-  min_temperature?: number;
-  max_temperature?: number;
-  min_humidity?: number;
-  max_humidity?: number;
-  min_pressure?: number;
-  max_pressure?: number;
-  max_wind_speed?: number;
 }

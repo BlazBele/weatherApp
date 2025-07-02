@@ -15,10 +15,15 @@ import { TimestampService } from '../../../services/timestamp.service';
 export class HomeComponent implements OnInit {
   weather: WeatherData = {
     temperature: 0,
+    previous_temperature: 0,
     humidity: 0,
+    previous_humidity: 0,
     pressure0: 0,
+    previous_pressure0: 0,
     wind_speed: 0,
+    previous_wind_speed: 0,
     wind_direction: '',
+    previous_wind_direction: '',
     timestamp: '',
     created_at: ''
   };
@@ -30,35 +35,33 @@ export class HomeComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.loadDailyWeatherSummary();
+    this.loadWeatherFromSupabase();
   }
 
-  loadDailyWeatherSummary(): void {
+  loadWeatherFromSupabase(): void {
     this.supabaseService.getDailyWeatherSummary().subscribe(data => {
+      console.log('Prejeto iz Supabase:', data);
       if (data) {
-        // Formatiraj created_at če obstaja (trenutne podatke lahko formatiraš po potrebi)
-        const formattedCreatedAt = data.created_at 
-          ? this.timestampService.formatDateString(data.created_at) 
-          : '';
-
-        // Pripravi objekt weather s trenutnimi in dnevnim min/max podatki
+        const formattedCreatedAt = this.timestampService.formatDateString(data.created_at);
         this.weather = {
-          temperature: data.current_temperature,
-          humidity: data.current_humidity,
-          pressure0: data.current_pressure,
-          wind_speed: data.current_wind_speed,
-          wind_direction: data.current_wind_direction,
-          timestamp: data.timestamp || '',
+          ...data,
           created_at: formattedCreatedAt,
-
-          min_temperature: data.min_temperature,
-          max_temperature: data.max_temperature,
-          min_humidity: data.min_humidity,
-          max_humidity: data.max_humidity,
-          min_pressure: data.min_pressure,
-          max_pressure: data.max_pressure,
-          max_wind_speed: data.max_wind_speed
         };
+        console.log(this.weather)
       }
     });
   }
+
+  async refreshWindData(): Promise<void> {
+    try {
+      const wind: WindData = await firstValueFrom(this.apiService.getWindData());
+      const timestamp = this.timestampService.getFormattedTimestamp();
+      this.weather.timestamp = timestamp;
+      this.weather.wind_speed = wind.wind_speed;
+      this.weather.wind_direction = wind.wind_direction;
+      //console.log(this.weather.wind_speed, this.weather.wind_direction )
+    } catch (error) {
+      console.error('Napaka pri osvežitvi vetra:', error);
+    }
+  }
+}

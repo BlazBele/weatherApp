@@ -11,7 +11,8 @@ import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 import { HttpClient, provideHttpClient } from '@angular/common/http';
 import { LoginComponent } from './components/pages/auth/login/login.component';
 import { FormsModule } from '@angular/forms';
-import { AdminDashboardComponent } from './components/pages/admin-dashboard/admin-dashboard.component'
+import { AdminDashboardComponent } from './components/pages/admin-dashboard/admin-dashboard.component';
+import { TrendIndicatorComponent } from './components/partials/trend-indicator/trend-indicator.component'
 
 
 export function HttpLoaderFactory(http: HttpClient){
@@ -24,7 +25,8 @@ export function HttpLoaderFactory(http: HttpClient){
     HomeComponent,
     NavbarComponent,
     LoginComponent,
-    AdminDashboardComponent
+    AdminDashboardComponent,
+    TrendIndicatorComponent
   ],
   imports: [
     BrowserModule,
