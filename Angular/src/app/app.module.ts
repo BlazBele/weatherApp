@@ -12,7 +12,9 @@ import { HttpClient, provideHttpClient } from '@angular/common/http';
 import { LoginComponent } from './components/pages/auth/login/login.component';
 import { FormsModule } from '@angular/forms';
 import { AdminDashboardComponent } from './components/pages/admin-dashboard/admin-dashboard.component';
-import { TrendIndicatorComponent } from './components/partials/trend-indicator/trend-indicator.component'
+import { TrendIndicatorComponent } from './components/partials/trend-indicator/trend-indicator.component';
+import { EditSqlComponent } from './components/pages/edit-sql/edit-sql.component';
+import { CompassComponent } from './components/partials/compass/compass.component';
 
 
 export function HttpLoaderFactory(http: HttpClient){
@@ -26,7 +28,9 @@ export function HttpLoaderFactory(http: HttpClient){
     NavbarComponent,
     LoginComponent,
     AdminDashboardComponent,
-    TrendIndicatorComponent
+    TrendIndicatorComponent,
+    EditSqlComponent,
+    CompassComponent
   ],
   imports: [
     BrowserModule,

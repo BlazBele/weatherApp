@@ -1,19 +1,66 @@
 {
-    "LOGIN": {
-        "login" : "Prijavi se",
-        "logout" : "Odjavi se",
-        "adminOnly" : "Prijava za administratorja",
-        "password" : "Geslo",
-        "invalidCredentials": "Neveljavni podatki za prijavo.",
-        "accessDenied": "Dostop zavrnjen. Samo za administratorje."
-    },
-    "admin" : "Administrator",
-    "home" : "Domov",
-    "temperature" : "Temperatura",
-    "humidity" : "Vlaga",
-    "pressure" : "Tlak",
-    "windSpeed" : "Hitrost vetra",
-    "windDirection" : "Smer vetra",
-    "updated" : "Posodobljeno"
+  "LOGIN": {
+    "login": "Prijavi se",
+    "logout": "Odjavi se",
+    "password": "Geslo",
+    "adminOnly": "Prijava za administratorja",
+    "invalidCredentials": "Neveljavni podatki za prijavo.",
+    "accessDenied": "Dostop zavrnjen. Samo za administratorje."
+  },
+  "admin": "Administrator",
+  "home": "Domov",
+  "temperature": "Temperatura",
+  "humidity": "Vlaga",
+  "pressure": "Tlak",
+  "windSpeed": "Hitrost vetra",
+  "windDirection": "Smer vetra",
+  "updated": "Posodobljeno",
 
+  "TEMPERATURE": "Temperatura",
+  "HUMIDITY": "Vlaga",
+  "PRESSURE": "Tlak",
+  "WIND_SPEED": "Hitrost vetra",
+  "WIND_DIRECTION": "Smer vetra",
+  "RAIN": "Padal dež?",
+  "DATE": "Datum",
+  "EDIT": "Uredi",
+  "DELETE": "Izbriši",
+
+  "FIELDS": {
+    "ID": "ID",
+    "TEMPERATURE": "Temperatura",
+    "HUMIDITY": "Vlaga",
+    "PRESSURE": "Tlak",
+    "WIND_SPEED": "Hitrost vetra",
+    "WIND_DIRECTION": "Smer vetra",
+    "RAIN": "Padal dež?"
+  },
+
+  "PAGINATION": {
+    "FIRST": "Prva",
+    "PREVIOUS": "Prejšnja",
+    "NEXT": "Naslednja",
+    "LAST": "Zadnja"
+  },
+
+  "OPTIONS": {
+    "YES": "Da",
+    "NO": "Ne"
+  },
+
+  "BUTTONS": {
+    "CANCEL": "Prekliči",
+    "SAVE_CHANGES": "Shrani spremembe"
+  },
+
+  "WIND_DIRECTIONS": {
+    "S": "Sever",
+    "J": "Jug",
+    "V": "Vzhod",
+    "Z": "Zahod",
+    "SZ": "Severozahod",
+    "SV": "Severovzhod",
+    "JV": "Jugovzhod",
+    "JZ": "Jugozahod"
+  }
 }

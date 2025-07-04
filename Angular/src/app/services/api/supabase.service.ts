@@ -56,7 +56,9 @@ export class SupabaseService {
       temperature: 30.1,
       wind_direction: "Z",
       wind_speed: 0,
-      timestamp: ''
+      timestamp: '',
+      rain: false,
+      id: 1
     };
 
     return of(mockData);
@@ -78,5 +80,93 @@ export class SupabaseService {
         })
     );
   }
+
+  getTotalRows(): Observable<number> {
+  return from(
+    this.supabase
+      .from('VremenskiPodatki')
+      .select('*', { count: 'exact', head: true })
+      .then(({ count, error }) => {
+        if (error) {
+          console.error('Supabase count error:', error.message);
+          return 0;
+        }
+        return count ?? 0;
+      })
+  );
+}
+
+getWeatherDataTable(page: number, pageSize: number): Observable<any[]> {
+  const fromIndex = page * pageSize;
+  const toIndex = fromIndex + pageSize - 1;
+
+  return from(
+    this.supabase
+      .from('VremenskiPodatki')
+      .select('*')
+      .order('created_at', { ascending: false })
+      .range(fromIndex, toIndex)
+      .then(({ data, error }) => {
+        if (error) {
+          console.error('Supabase error:', error.message);
+          return [];
+        }
+        return data ?? [];
+      })
+  );
+}
+
+deleteWeatherEntry(id: number): Observable<boolean> {
+  return from(
+    this.supabase
+      .from('VremenskiPodatki')
+      .delete()
+      .eq('id', id)
+      .then(({ error }) => {
+        if (error) {
+          console.error('Napaka pri brisanju:', error.message);
+          return false;
+        }
+        return true;
+      })
+  );
+}
+
+
+getWeatherEntryById(id: number): Observable<WeatherData | null> {
+  return from(
+    this.supabase
+      .from('VremenskiPodatki')
+      .select('*')
+      .eq('id', id)
+      .single()
+      .then(({ data, error }) => {
+        if (error) {
+          console.error('Napaka pri pridobivanju podatka:', error.message);
+          return null;
+        }
+        return data;
+      })
+  );
+}
+
+
+updateWeatherEntry(id: number, updatedData: Partial<WeatherData>): Observable<boolean> {
+  return from(
+    this.supabase
+      .from('VremenskiPodatki')
+      .update(updatedData)
+      .eq('id', id)
+      .then(({ error }) => {
+        if (error) {
+          console.error('Napaka pri posodabljanju:', error.message);
+          return false;
+        }
+        return true;
+      })
+  );
+}
+
+
 
 }

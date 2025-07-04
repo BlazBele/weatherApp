@@ -25,4 +25,6 @@ export interface WeatherData {
 
   timestamp: string;
   created_at: string;
+  rain: boolean;
+  id: number;
 }

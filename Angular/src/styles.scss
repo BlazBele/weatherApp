@@ -44,6 +44,19 @@
       border-color: var(--bs-primary);
     }
   }
+  
+  .btn-theme {
+    background-color: var(--bs-primary);
+    color: var(--bs-body-color);
+    border: 1px solid var(--bs-primary);
+    transition: background-color 0.3s, color 0.3s, border-color 0.3s;
+  }
+
+  .btn-theme:hover {
+    background-color: var(--bs-secondary);
+    border-color: var(--bs-secondary);
+    color: var(--bs-body-bg);
+  }
 }
 
 /* Light Theme - Svetla Siva */
@@ -92,6 +105,19 @@
       background-color: var(--bs-primary);
       border-color: var(--bs-primary);
     }
+  }
+
+  .btn-theme {
+    background-color: var(--bs-primary);
+    color: var(--bs-body-color);
+    border: 1px solid var(--bs-primary);
+    transition: background-color 0.3s, color 0.3s, border-color 0.3s;
+  }
+
+  .btn-theme:hover {
+    background-color: var(--bs-secondary);
+    border-color: var(--bs-secondary);
+    color: var(--bs-body-bg);
   }
 }
 

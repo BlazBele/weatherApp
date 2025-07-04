@@ -25,10 +25,10 @@
       <div class="d-flex align-items-center ms-auto gap-3">
         <ul class="navbar-nav d-flex flex-row align-items-center">
           <li class="nav-item" *ngIf="!isLoggedIn">
-            <a routerLink="/login" class="nav-link no-padding">{{'LOGIN.login' | translate}}</a>
+            <button type="button" class="btn btn-primary no-padding" routerLink="/login" (click)="logout()">{{'LOGIN.login' | translate}}</button>
           </li>
           <li class="nav-item" *ngIf="isLoggedIn">
-            <a class="nav-link no-padding" (click)="logout()" style="cursor: pointer;">{{ 'LOGIN.logout' | translate}}</a>
+            <button type="button" class="btn btn btn-primary no-padding" (click)="logout()">{{ 'LOGIN.logout' | translate}}</button>
           </li>
         </ul>
 

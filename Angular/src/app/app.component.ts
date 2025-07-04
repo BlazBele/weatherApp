@@ -8,12 +8,7 @@ import { AuthService } from './services/auth.service';
   styleUrl: './app.component.scss'
 })
 
-export class AppComponent implements OnInit {
+export class AppComponent{
   title = 'weatherApp';
 
-  constructor(private authService: AuthService) {}
-
-  ngOnInit() {
-    this.authService.registerBeforeUnloadListener();
-  }
 }
