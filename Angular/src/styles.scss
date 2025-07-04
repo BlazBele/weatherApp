@@ -121,7 +121,10 @@
   }
 }
 
-/* Skupni stili */
 body {
   transition: all 0.3s ease;
+}
+
+td,  tr {
+  text-align: center; 
 }

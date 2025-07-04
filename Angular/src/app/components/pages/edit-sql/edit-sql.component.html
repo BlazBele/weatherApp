@@ -110,8 +110,8 @@
               <div class="form-group">
                 <label>{{ 'FIELDS.RAIN' | translate }}</label>
                 <select class="form-control" [(ngModel)]="editedWeatherData.rain" name="rain">
-                  <option [ngValue]="true">YES</option>
-                  <option [ngValue]="false">NO</option>
+                  <option [ngValue]="true">{{ 'OPTIONS.YES' | translate }}</option>
+                  <option [ngValue]="false">{{ 'OPTIONS.NO' | translate }}</option>
                 </select>
               </div>
             </div>
