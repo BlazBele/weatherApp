@@ -15,7 +15,8 @@ export class LoginComponent {
   errorMessage = '';
 
   constructor(
-    private authService: AuthService, private router: Router,
+    private authService: AuthService, 
+    private router: Router,
     private translate: TranslateService
   ) {}
 
