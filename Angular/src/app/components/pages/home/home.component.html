@@ -97,6 +97,9 @@
           <app-compass [direction]="weather.wind_direction"></app-compass>
           <h5 class="card-title">{{ 'windDirection' | translate }}</h5>
           <p class="card-text">{{ ('wind_direction.' + weather.wind_direction) | translate }}</p>
+            <script>
+              console.log('wind_direction.' + weather.wind_direction);
+            </script>
         </div>
       </div>
     </div>

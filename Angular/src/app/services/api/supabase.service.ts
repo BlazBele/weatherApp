@@ -37,7 +37,7 @@ export class SupabaseService {
       if (environment.useMock) {
 
     const mockData: WeatherData = {
-      created_at: "02/07/2025 20:00:00",
+      created_at: "00/00/2025 00:00:00",
       daily_max_humidity: 84,
       daily_max_pressure0: 1019.7,
       daily_max_temperature: 42.9,
