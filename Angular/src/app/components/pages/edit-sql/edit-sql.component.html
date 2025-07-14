@@ -1,19 +1,42 @@
 <div class="container mt-4">
   <h3>{{ 'admin' | translate }}</h3>
 
+  <label for="sortColumn" class="mb-0 me-2">{{ 'sort' | translate}}</label>
+  <select id="sortColumn" class="form-select d-inline-block w-auto" [(ngModel)]="sortColumn" (change)="loadData()">
+    <option value="created_at">{{ 'date' | translate }}</option>
+    <option value="temperature">{{ 'temperature' | translate }}</option>
+    <option value="humidity">{{ 'humidity' | translate }}</option>
+    <option value="pressure0">{{ 'pressure' | translate }}</option>
+    <option value="wind_speed">{{ 'windSpeed' | translate }}</option>
+  </select>
+
+<i class="bi ms-2" 
+  [ngClass]="sortDirection === 'asc' ? 'bi-arrow-up' : 'bi-arrow-down'" 
+  style="cursor: pointer;" 
+  (click)="toggleSortDirection()"
+  title="Spremeni smer sortiranja"
+></i>
+
+  <div class="mb-3 float-end">
+    <label for="pageSize" class="form-label me-2">{{ 'nOfRows' | translate }}:</label>
+    <select id="pageSize" class="form-select d-inline-block w-auto" [(ngModel)]="pageSize" (change)="onPageSizeChange()">
+      <option *ngFor="let size of [10, 20, 50, 100, 200]" [value]="size">{{ size }}</option>
+    </select>
+  </div>
+
   <table class="table table-striped table-bordered">
     <thead>
       <tr>
-        <th>{{ 'FIELDS.ID' | translate }}</th>
-        <th>{{ 'FIELDS.TEMPERATURE' | translate }}</th>
-        <th>{{ 'FIELDS.HUMIDITY' | translate }}</th>
-        <th>{{ 'FIELDS.PRESSURE' | translate }}</th>
-        <th>{{ 'FIELDS.WIND_SPEED' | translate }}</th>
-        <th>{{ 'FIELDS.WIND_DIRECTION' | translate }}</th>
-        <th>{{ 'FIELDS.RAIN' | translate }}</th>
-        <th>{{ 'DATE' | translate }}</th>
-        <th>{{ 'EDIT' | translate }}</th> 
-        <th>{{ 'DELETE' | translate }}</th> 
+        <th>{{ 'id' | translate }}</th>
+        <th>{{ 'temperature' | translate }}</th>
+        <th>{{ 'humidity' | translate }}</th>
+        <th>{{ 'pressure' | translate }}</th>
+        <th>{{ 'windSpeed' | translate }}</th>
+        <th>{{ 'windDirection' | translate }}</th>
+        <th>{{ 'rain' | translate }}</th>
+        <th>{{ 'date' | translate }}</th>
+        <th>{{ 'edit' | translate }}</th> 
+        <th>{{ 'delete' | translate }}</th> 
       </tr>
     </thead>
     <tbody>
@@ -23,14 +46,14 @@
         <td>{{ row.humidity }}</td>
         <td>{{ row.pressure0 }}</td>
         <td>{{ row.wind_speed }}</td>
-        <td>{{ row.wind_direction }}</td>
-        <td>{{ row.rain ? ( 'OPTIONS.YES' | translate ) : ( 'OPTIONS.NO' | translate ) }}</td>
+        <td>{{ 'wind_direction.' + row.wind_direction | translate }}</td>
+        <td>{{ row.rain ? ( 'yes' | translate ) : ( 'no' | translate ) }}</td>
         <td>{{ row.created_at | date:'dd.MM.yyyy HH:mm' }}</td>
         <td>
-          <button class="btn btn-sm btn-primary" (click)="editRow(row)">{{ 'EDIT' | translate }}</button>
+          <button class="btn btn-sm btn-primary" (click)="editRow(row)">{{ 'edit' | translate }}</button>
         </td>
         <td>
-          <button class="btn btn-sm btn-danger" (click)="deleteRow(row.id)">{{ 'DELETE' | translate }}</button>
+          <button class="btn btn-sm btn-danger" (click)="deleteRow(row.id)">{{ 'delete' | translate }}</button>
         </td>
       </tr>
     </tbody>
@@ -40,19 +63,19 @@
   <nav *ngIf="totalPages > 1" aria-label="Page navigation">
     <ul class="pagination justify-content-center mt-5">
       <li class="page-item" [class.disabled]="page === 0">
-        <a class="page-link" href="#" (click)="setPage(0); $event.preventDefault()">{{ 'PAGINATION.FIRST' | translate }}</a>
+        <a class="page-link" href="#" (click)="setPage(0); $event.preventDefault()">{{ 'first' | translate }}</a>
       </li>
       <li class="page-item" [class.disabled]="page === 0">
-        <a class="page-link" href="#" (click)="setPage(page - 1); $event.preventDefault()">{{ 'PAGINATION.PREVIOUS' | translate }}</a>
+        <a class="page-link" href="#" (click)="setPage(page - 1); $event.preventDefault()">{{ 'previous' | translate }}</a>
       </li>
       <li *ngFor="let p of visiblePages()" class="page-item" [class.active]="p === page">
         <a class="page-link" href="#" (click)="setPage(p); $event.preventDefault()">{{ p + 1 }}</a>
       </li>
       <li class="page-item" [class.disabled]="page === totalPages - 1">
-        <a class="page-link" href="#" (click)="setPage(page + 1); $event.preventDefault()">{{ 'PAGINATION.NEXT' | translate }}</a>
+        <a class="page-link" href="#" (click)="setPage(page + 1); $event.preventDefault()">{{ 'next' | translate }}</a>
       </li>
       <li class="page-item" [class.disabled]="page === totalPages - 1">
-        <a class="page-link" href="#" (click)="setPage(totalPages - 1); $event.preventDefault()">{{ 'PAGINATION.LAST' | translate }}</a>
+        <a class="page-link" href="#" (click)="setPage(totalPages - 1); $event.preventDefault()">{{ 'last' | translate }}</a>
       </li>
     </ul>
   </nav>
@@ -69,49 +92,49 @@
           <form>
             <div class="form-row">
               <div class="form-group">
-                <label>{{ 'FIELDS.ID' | translate }}</label>
+                <label>{{ 'id' | translate }}</label>
                 <input type="number" class="form-control" [(ngModel)]="editedWeatherData.id" name="id" />
               </div>
               <div class="form-group">
-                <label>{{ 'FIELDS.TEMPERATURE' | translate }}</label>
+                <label>{{ 'temperature' | translate }}</label>
                 <input type="number" class="form-control" [(ngModel)]="editedWeatherData.temperature" name="temperature" />
               </div>
               <div class="form-group">
-                <label>{{ 'FIELDS.HUMIDITY' | translate }}</label>
+                <label>{{ 'humidity' | translate }}</label>
                 <input type="number" class="form-control" [(ngModel)]="editedWeatherData.humidity" name="humidity" />
               </div>
             </div>
 
             <div class="form-row">
               <div class="form-group">
-                <label>{{ 'FIELDS.PRESSURE' | translate }}</label>
+                <label>{{ 'pressure' | translate }}</label>
                 <input type="number" class="form-control" [(ngModel)]="editedWeatherData.pressure0" name="pressure0" />
               </div>
               <div class="form-group">
-                <label>{{ 'FIELDS.WIND_SPEED' | translate }}</label>
+                <label>{{ 'windSpeed' | translate }}</label>
                 <input type="number" class="form-control" [(ngModel)]="editedWeatherData.wind_speed" name="wind_speed" />
               </div>
             </div>
 
             <div class="form-row">
               <div class="form-group">
-                <label>{{ 'FIELDS.WIND_DIRECTION' | translate }}</label>
+                <label>{{ 'windDirection' | translate }}</label>
                 <select class="form-control" [(ngModel)]="editedWeatherData.wind_direction" name="wind_direction">
-                  <option [ngValue]="'S'">{{ 'WIND_DIRECTIONS.S' | translate }}</option>
-                  <option [ngValue]="'J'">{{ 'WIND_DIRECTIONS.J' | translate }}</option>
-                  <option [ngValue]="'V'">{{ 'WIND_DIRECTIONS.V' | translate }}</option>
-                  <option [ngValue]="'Z'">{{ 'WIND_DIRECTIONS.Z' | translate }}</option>
-                  <option [ngValue]="'SZ'">{{ 'WIND_DIRECTIONS.SZ' | translate }}</option>
-                  <option [ngValue]="'SV'">{{ 'WIND_DIRECTIONS.SV' | translate }}</option>
-                  <option [ngValue]="'JV'">{{ 'WIND_DIRECTIONS.JV' | translate }}</option>
-                  <option [ngValue]="'JZ'">{{ 'WIND_DIRECTIONS.JZ' | translate }}</option>
+                  <option [ngValue]="'S'">{{ 'wind_direction.S' | translate }}</option>
+                  <option [ngValue]="'J'">{{ 'wind_direction.J' | translate }}</option>
+                  <option [ngValue]="'V'">{{ 'wind_direction.V' | translate }}</option>
+                  <option [ngValue]="'Z'">{{ 'wind_direction.Z' | translate }}</option>
+                  <option [ngValue]="'SZ'">{{ 'wind_direction.SZ' | translate }}</option>
+                  <option [ngValue]="'SV'">{{ 'wind_direction.SV' | translate }}</option>
+                  <option [ngValue]="'JV'">{{ 'wind_direction.JV' | translate }}</option>
+                  <option [ngValue]="'JZ'">{{ 'wind_direction.JZ' | translate }}</option>
                 </select>
               </div>
               <div class="form-group">
-                <label>{{ 'FIELDS.RAIN' | translate }}</label>
+                <label>{{ 'rain' | translate }}</label>
                 <select class="form-control" [(ngModel)]="editedWeatherData.rain" name="rain">
-                  <option [ngValue]="true">{{ 'OPTIONS.YES' | translate }}</option>
-                  <option [ngValue]="false">{{ 'OPTIONS.NO' | translate }}</option>
+                  <option [ngValue]="true">{{ 'yes' | translate }}</option>
+                  <option [ngValue]="false">{{ 'no' | translate }}</option>
                 </select>
               </div>
             </div>
@@ -119,8 +142,8 @@
         </div>
 
         <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" (click)="cancelEdit()">{{ 'BUTTONS.CANCEL' | translate }}</button>
-          <button type="button" class="btn btn-primary" (click)="submitEdit()">{{ 'BUTTONS.SAVE_CHANGES' | translate }}</button>
+          <button type="button" class="btn btn-secondary" (click)="cancelEdit()">{{ 'cancel' | translate }}</button>
+          <button type="button" class="btn btn-primary" (click)="submitEdit()">{{ 'saveChanges' | translate }}</button>
         </div>
       </div>
     </div>

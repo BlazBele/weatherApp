@@ -11,16 +11,15 @@ import { WeatherData } from '../../../interfaces/weather-data';
 export class EditSqlComponent implements OnInit {
   data: any[] = [];
   page = 0; 
-  pageSize = 100;
+  pageSize = 10;
   totalPages = 0;
   loading = false;
 
+  sortColumn: string = 'created_at';
+  sortDirection: 'asc' | 'desc' = 'desc';
+
   isEditModalOpen = false;
   editedWeatherData: Partial<WeatherData> = {};
-
-
-  // Če želiš filtre, jih lahko definiraš tukaj
-  // filters: { column: string; value: any }[] = [];
 
   constructor(private supabaseService: SupabaseService) {}
 
@@ -28,23 +27,40 @@ export class EditSqlComponent implements OnInit {
     this.loadData();
   }
 
-  loadData() {
-    this.loading = true;
-    this.supabaseService
-      .getWeatherDataTable(this.page, this.pageSize)
-      .subscribe((rows) => {
+loadData() {
+  this.loading = true;
+  const fromIndex = this.page * this.pageSize;
+  const toIndex = fromIndex + this.pageSize;
+
+  //console.log(`Loading page ${this.page} with size ${this.pageSize}, range: ${fromIndex}-${toIndex}`);
+
+
+  this.supabaseService
+    .getWeatherDataTable(fromIndex, toIndex, this.sortColumn, this.sortDirection)
+    .subscribe({
+      next: (rows) => {
         this.data = rows;
         this.loading = false;
-        console.log(rows)
-      });
+        //console.log('Loaded data:', this.data);
+      },
+      error: (err) => {
+        //console.error('Error loading data:', err);
+        this.loading = false;
+      }
+    });
 
-    // Naložimo tudi število vseh vrstic (za paginacijo)
-    this.supabaseService
-      .getTotalRows()
-      .subscribe((count) => {
+  this.supabaseService
+    .getTotalRows()
+    .subscribe({
+      next: (count) => {
         this.totalPages = Math.ceil(count / this.pageSize);
-      });
-  }
+        //console.log('Total pages:', this.totalPages);
+      },
+      error: (err) => {
+        //console.error('Error getting total rows:', err);
+      }
+    });
+}
 
   setPage(page: number) {
     if (page < 0 || page >= this.totalPages || this.loading) return;
@@ -70,8 +86,7 @@ export class EditSqlComponent implements OnInit {
     return Array(this.totalPages).fill(0).map((x, i) => i);
   }
 
-
-  // Odpri modal in naloži podatke za izbrani ID
+  //Odpri modal in naloži podatke za izbrani ID
   editRow(row: any) {
     this.supabaseService.getWeatherEntryById(row.id).subscribe((data) => {
       if (data) {
@@ -99,15 +114,24 @@ export class EditSqlComponent implements OnInit {
 
   deleteRow(id: number) {
     if (confirm('Ali res želite izbrisati zapis?')) {
-      console.log("1")
       this.supabaseService.deleteWeatherEntry(id).subscribe((success) => {
-        console.log("2")
         if (success) {
-          console.log("3")
           this.loadData();
         }
       });
     }
   }
+
+  onPageSizeChange() {
+    this.pageSize = +this.pageSize; //Pretvori v number, ERROR!!!
+    this.page = 0;
+    this.loadData();
+  }
+
+  toggleSortDirection() {
+    this.sortDirection = this.sortDirection === 'asc' ? 'desc' : 'asc';
+    this.loadData();
+  }
+
 }
 

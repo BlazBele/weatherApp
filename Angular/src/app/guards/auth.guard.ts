@@ -17,7 +17,7 @@ export class AuthGuard implements CanActivate {
 
     const { data: profile, error } = await this.authService.supabaseClient
       .from('profiles')
-      .select('role')
+      .select('role, name, surname')
       .eq('id', user.id)
       .single();
 
@@ -26,8 +26,8 @@ export class AuthGuard implements CanActivate {
       this.router.navigate(['/login']);
       return false;
     }
-
-    console.log('profile.role:', profile.role);
+    console.log('Logged user:')
+    console.log(`Role: ${profile.role}, Name: ${profile.name}, Surname: ${profile.surname}`);
 
     if (profile.role === 1) {
       return true;

@@ -96,16 +96,43 @@ export class SupabaseService {
   );
 }
 
-getWeatherDataTable(page: number, pageSize: number): Observable<any[]> {
-  const fromIndex = page * pageSize;
-  const toIndex = fromIndex + pageSize - 1;
-
+getWeatherDataTable(
+  fromIndex: number,
+  toIndex: number,
+  sortColumn: string = 'created_at',
+  sortDirection: 'asc' | 'desc' = 'desc'
+): Observable<any[]> {
   return from(
     this.supabase
       .from('VremenskiPodatki')
       .select('*')
-      .order('created_at', { ascending: false })
+      .order(sortColumn, { ascending: sortDirection === 'asc' })
       .range(fromIndex, toIndex)
+      .then(({ data, error }) => {
+        if (error) {
+          console.error('Supabase fetch error:', error.message);
+          throw error;
+        }
+        return data ?? [];
+      })
+  );
+}
+
+
+
+
+
+exportWeatherData(
+  limit: number = 100,
+  sortColumn: string = 'created_at',
+  sortDirection: 'asc' | 'desc' = 'desc'
+): Observable<any[]> {
+  return from(
+    this.supabase
+      .from('VremenskiPodatki')
+      .select('*')
+      .order(sortColumn, { ascending: sortDirection === 'asc' })
+      .limit(limit)
       .then(({ data, error }) => {
         if (error) {
           console.error('Supabase error:', error.message);
@@ -115,6 +142,8 @@ getWeatherDataTable(page: number, pageSize: number): Observable<any[]> {
       })
   );
 }
+
+
 
 deleteWeatherEntry(id: number): Observable<boolean> {
   return from(

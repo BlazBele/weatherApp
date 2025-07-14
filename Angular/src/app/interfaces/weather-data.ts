@@ -9,7 +9,7 @@ export interface WeatherData {
   previous_humidity?: number;
   daily_min_humidity?: number;
   daily_max_humidity?: number;
-
+  pressure?: number;
   pressure0: number;
   previous_pressure0?: number;
   daily_min_pressure0?: number;

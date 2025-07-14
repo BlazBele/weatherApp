@@ -15,6 +15,10 @@ import { AdminDashboardComponent } from './components/pages/admin-dashboard/admi
 import { TrendIndicatorComponent } from './components/partials/trend-indicator/trend-indicator.component';
 import { EditSqlComponent } from './components/pages/edit-sql/edit-sql.component';
 import { CompassComponent } from './components/partials/compass/compass.component';
+import { AdminSidebarComponent } from './components/partials/admin-sidebar/admin-sidebar.component';
+
+import { MachineLearningComponent } from './components/pages/machine-learning/machine-learning.component';
+import { ExportComponent } from './components/pages/export/export.component';
 
 
 export function HttpLoaderFactory(http: HttpClient){
@@ -30,7 +34,10 @@ export function HttpLoaderFactory(http: HttpClient){
     AdminDashboardComponent,
     TrendIndicatorComponent,
     EditSqlComponent,
-    CompassComponent
+    CompassComponent,
+    AdminSidebarComponent,
+    ExportComponent,
+    MachineLearningComponent
   ],
   imports: [
     BrowserModule,
