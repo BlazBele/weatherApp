@@ -60,7 +60,7 @@ export class HomeComponent implements OnInit {
     try {
       const wind: WindData = await firstValueFrom(this.apiService.getWindData());
       const timestamp = this.timestampService.getFormattedTimestamp();
-      this.weather.timestamp = wind.timestamp;
+      this.weather.timestamp = "tralala";
       this.weather.wind_speed = wind.wind_speed;
       this.weather.wind_direction = wind.wind_direction;
     } catch (error) {
