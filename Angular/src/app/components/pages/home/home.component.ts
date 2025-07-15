@@ -60,9 +60,10 @@ export class HomeComponent implements OnInit {
     try {
       const wind: WindData = await firstValueFrom(this.apiService.getWindData());
       const timestamp = this.timestampService.getFormattedTimestamp();
-      this.weather.timestamp = "tralala";
+      this.weather.timestamp = timestamp;
       this.weather.wind_speed = wind.wind_speed;
       this.weather.wind_direction = wind.wind_direction;
+
     } catch (error) {
       console.error('Napaka pri osvežitvi vetra:', error);
     }

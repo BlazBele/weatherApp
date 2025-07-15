@@ -16,12 +16,12 @@ export class FlaskService {
 
 getWindData(): Observable<WindData> {
   if (environment.useMock) {
-    console.log("USE MOCK");
+
     console.log(environment.useMock);
 
     const mockWindData: WindData = {
       timestamp: "00/00/2025 00:00:00",
-      wind_direction: "Z",
+      wind_direction: "S",
       wind_speed: 0
     };
 

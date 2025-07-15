@@ -41,7 +41,7 @@ export class SupabaseService {
       daily_max_humidity: 84,
       daily_max_pressure0: 1019.7,
       daily_max_temperature: 42.9,
-      daily_max_wind_speed: 2.5,
+      daily_max_wind_speed: 10,
       daily_min_humidity: 17,
       daily_min_pressure0: 1014,
       daily_min_temperature: 12.5,
@@ -74,7 +74,6 @@ export class SupabaseService {
             console.error('Supabase error:', error.message);
             return null;
           }
-          console.log(data);
           return data;
 
         })
@@ -110,7 +109,7 @@ getWeatherDataTable(
       .range(fromIndex, toIndex)
       .then(({ data, error }) => {
         if (error) {
-          console.error('Supabase fetch error:', error.message);
+          console.error('Supabase error:', error.message);
           throw error;
         }
         return data ?? [];
