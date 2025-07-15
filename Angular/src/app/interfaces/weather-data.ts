@@ -1,5 +1,4 @@
 export interface WeatherData {
-
   temperature: number;
   previous_temperature?: number;
   daily_min_temperature?: number;

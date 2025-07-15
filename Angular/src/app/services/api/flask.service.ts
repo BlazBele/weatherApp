@@ -20,7 +20,7 @@ getWindData(): Observable<WindData> {
     console.log(environment.useMock);
 
     const mockWindData: WindData = {
-      timestamp: "00/00/2025 00:00:00",
+      timestamp: "2000-01-01T01:00:00.000",
       wind_direction: "S",
       wind_speed: 0
     };

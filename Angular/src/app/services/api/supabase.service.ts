@@ -37,7 +37,7 @@ export class SupabaseService {
       if (environment.useMock) {
 
     const mockData: WeatherData = {
-      created_at: "00/00/2025 00:00:00",
+      created_at: "2000-01-01T01:00:00.000",
       daily_max_humidity: 84,
       daily_max_pressure0: 1019.7,
       daily_max_temperature: 42.9,
@@ -118,9 +118,6 @@ getWeatherDataTable(
 }
 
 
-
-
-
 exportWeatherData(
   limit: number = 100,
   sortColumn: string = 'created_at',
@@ -141,7 +138,6 @@ exportWeatherData(
       })
   );
 }
-
 
 
 deleteWeatherEntry(id: number): Observable<boolean> {
@@ -177,7 +173,6 @@ getWeatherEntryById(id: number): Observable<WeatherData | null> {
       })
   );
 }
-
 
 updateWeatherEntry(id: number, updatedData: Partial<WeatherData>): Observable<boolean> {
   return from(

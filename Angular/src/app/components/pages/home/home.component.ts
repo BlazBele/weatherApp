@@ -6,6 +6,8 @@ import { firstValueFrom } from 'rxjs';
 
 import { TimestampService } from '../../../services/timestamp.service';
 import { WindData } from '../../../interfaces/wind-data';
+import { rainPrediction } from '../../../interfaces/rain-prediction';
+import { FastApiService } from '../../../services/api/fast-api.service';
 
 @Component({
   selector: 'app-home',
@@ -14,6 +16,7 @@ import { WindData } from '../../../interfaces/wind-data';
   styleUrls: ['./home.component.scss']
 })
 export class HomeComponent implements OnInit {
+  rainPrediction?: rainPrediction;
   weather: WeatherData = {
     temperature: 0,
     previous_temperature: 0,
@@ -31,14 +34,17 @@ export class HomeComponent implements OnInit {
     id: 1
   };
 
+
   constructor(
     private supabaseService: SupabaseService,
     private apiService: FlaskService,
-    private timestampService: TimestampService
+    private timestampService: TimestampService,
+    private fastApiService: FastApiService
   ) {}
 
   ngOnInit(): void {
     this.loadWeatherFromSupabase();
+    this.refreshRainPrediction();
   }
 
   loadWeatherFromSupabase(): void {
@@ -68,4 +74,20 @@ export class HomeComponent implements OnInit {
       console.error('Napaka pri osvežitvi vetra:', error);
     }
   }
+
+  refreshRainPrediction(): void {
+    this.fastApiService.getRainPrediction().subscribe({
+      next: (data) => {
+        console.log("Raw", data.timestamp)
+        this.rainPrediction = data;
+        this.rainPrediction.timestamp = this.timestampService.formatDateString(data.timestamp);
+        console.log("Test api");
+        console.log(data)
+      },
+      error: (err) => {
+        console.error(err);
+      }
+    });
+  }
+
 }
