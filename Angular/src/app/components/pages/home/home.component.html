@@ -118,8 +118,9 @@
 
       <div class="card mt-3 flex-grow-1">
         <div class="card-body">
-          <h5 class="card-title">Tretja kartica</h5>
-          <p class="card-text">Vsebina tretje kartice.</p>
+          <h5 class="card-title">{{ 'RainPrediction3' | translate}}</h5>
+          <p class="card-text">{{ rainPrediction?.prediction ? ('rainFalse' | translate) : ('rainTrue' | translate) }}</p>
+          <p class="card-text">{{ 'probability' | translate }}: {{rainPrediction?.probability}}%</p>
         </div>
       </div>
     </div>

@@ -55,5 +55,10 @@
   "nOfRowsExport": "Število vrstic za izvoz",
   "nOfRows": "Število vrstic",
   "selectColumns": "Izbrani stolpci",
-  "all": "Vse"
+  "all": "Vse",
+  "probability": "Verjetnost",
+  "RainPrediction3": "Ali bo padal dež čez 3 ure?",
+  "rainTrue" : "Dežja ne bo!",
+  "rainFalse" : "Dež bo padal!"
+
 }

@@ -54,6 +54,10 @@
   "nOfRowsExport": "Number of rows",
   "nOfRows": "Number of rows",
   "selectColumns": "Columns",
-  "all": "All"
+  "all": "All",
+  "probability": "Probability",
+  "RainPrediction3": "Will it rain in 3 hours?",
+  "rainTrue": "It will not rain!",
+  "rainFalse": "It will rain!"
 
 }
