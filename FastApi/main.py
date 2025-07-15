@@ -8,6 +8,7 @@ from sklearn.model_selection import train_test_split
 from sklearn.metrics import accuracy_score
 from fastapi import FastAPI, HTTPException
 from pydantic import BaseModel
+from fastapi.responses import FileResponse
 
 import datetime
 from fastapi.middleware.cors import CORSMiddleware
@@ -168,7 +169,7 @@ def prepare_prediction_data(last_9_records):
         last_record = last_9_records.iloc[-1]
         prev_record = last_9_records.iloc[-2]
         hour_ago_record = last_9_records.iloc[-4] if len(last_9_records) >= 4 else prev_record
-        
+
         return {
             'temperature': last_record['temperature'],
             'humidity': last_record['humidity'],
@@ -273,6 +274,14 @@ async def model_status():
         "data_path": DATA_PATH,
         "timestamp": datetime.datetime.now()
     }
+
+@app.get("/download")
+async def download_model():
+    filename = "rain_prediction_model.pkl"
+    try:
+        return FileResponse(path=filename, filename="download.pkl", media_type='application/octet-stream')
+    except Exception:
+        raise HTTPException(status_code=404, detail=f"Datoteka '{filename}' ni bila najdena.")
 
 
 if __name__ == "__main__":
