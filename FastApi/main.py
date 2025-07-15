@@ -244,7 +244,7 @@ def make_prediction(input_data: dict):
         raise HTTPException(status_code=500, detail=f"Napaka pri napovedovanju: {str(e)}")
 
 # --- API Endpoints ---
-@app.post("/train", response_model=TrainingResult)
+@app.get("/train", response_model=TrainingResult)
 async def train_model():
     """
     Usposabljanje modela XGBoost za napovedovanje dežja.
@@ -254,7 +254,7 @@ async def train_model():
     """
     return train_xgboost_model()
 
-@app.post("/predict", response_model=PredictionResult)
+@app.get("/predict", response_model=PredictionResult)
 async def predict_from_latest():
     try:
         last_9_records = get_last_9_records()
