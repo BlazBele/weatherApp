@@ -42,13 +42,13 @@ class PredictionResult(BaseModel):
     prediction: bool
     probability: float
     message: str
-    timestamp: datetime.datetime
+    timestamp: datetime
 
 class TrainingResult(BaseModel):
     status: str
     accuracy: float
     message: str
-    timestamp: datetime.datetime
+    timestamp: datetime
 
 # --- Helper Functions ---
 def load_env_vars():
