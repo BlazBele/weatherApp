@@ -78,11 +78,8 @@ export class HomeComponent implements OnInit {
   refreshRainPrediction(): void {
     this.fastApiService.getRainPrediction().subscribe({
       next: (data) => {
-        console.log("Raw", data.timestamp)
         this.rainPrediction = data;
         this.rainPrediction.timestamp = this.timestampService.formatDateString(data.timestamp);
-        console.log("Test api");
-        console.log(data)
       },
       error: (err) => {
         console.error(err);

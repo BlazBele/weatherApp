@@ -24,8 +24,10 @@ getRainPrediction(): Observable<rainPrediction> {
         probability: 0.0,
         timestamp: "2000-01-01T01:00:00.000"
       };
+      console.log("Fake prediction.")
       return of(mockPrediction);
     } else {
+      console.log("True prediction.")
       return this.http.get<rainPrediction>(`${this.apiUrl}/predict`);
     }
   }

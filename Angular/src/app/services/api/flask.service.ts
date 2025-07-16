@@ -24,10 +24,10 @@ getWindData(): Observable<WindData> {
       wind_direction: "S",
       wind_speed: 0
     };
-
+    console.log("Fake wind data.")
     return of(mockWindData);
   } else {
-
+    console.log("True wind data.")
     return this.http.get<WeatherData>(`${this.apiUrl}/wind_data`);
 
   }
