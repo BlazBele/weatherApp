@@ -28,6 +28,7 @@ getRainPrediction(): Observable<rainPrediction> {
       return of(mockPrediction);
     } else {
       console.log("True prediction.")
+      console.log("API URL:",this.apiUrl)
       return this.http.get<rainPrediction>(`${this.apiUrl}/predict`);
     }
   }
