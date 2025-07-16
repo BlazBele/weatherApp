@@ -20,11 +20,15 @@ app = FastAPI(title="Rain Prediction API",
 # Configure CORS
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:4200"],
+    allow_origins=[
+        "http://localhost:4200",
+        "https://weatherapp-xht9.onrender.com"
+    ],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
 
 # Global configuration
 MODEL_PATH = "rain_prediction_model.pkl"
