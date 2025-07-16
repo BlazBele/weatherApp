@@ -14,13 +14,12 @@ export class FlaskService {
 
   constructor(private http: HttpClient) {}
 
+//PRIDOBI PODATKE O VETRU
 getWindData(): Observable<WindData> {
   if (environment.useMock) {
 
-    console.log(environment.useMock);
-
     const mockWindData: WindData = {
-      timestamp: "2000-01-01T01:00:00.000",
+      timestamp: "01/01/2000 01:00:00",
       wind_direction: "S",
       wind_speed: 0
     };
@@ -28,7 +27,10 @@ getWindData(): Observable<WindData> {
     return of(mockWindData);
   } else {
     console.log("True wind data.")
-    return this.http.get<WeatherData>(`${this.apiUrl}/wind_data`);
+    
+    return this.http.get<WeatherData>(`${this.apiUrl}/wind_data`, {
+      headers: { 'ngrok-skip-browser-warning': 'true' }
+    });
 
   }
 }

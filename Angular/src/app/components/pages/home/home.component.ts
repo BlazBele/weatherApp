@@ -49,9 +49,8 @@ export class HomeComponent implements OnInit {
 
   loadWeatherFromSupabase(): void {
     this.supabaseService.getDailyWeatherSummary().subscribe(data => {
-      console.log('Prejeto iz Supabase:', data);
+      //console.log('Prejeto iz Supabase:', data);
       if (data) {
-        console.log(data.timestamp)
         const formattedCreatedAt = this.timestampService.formatDateString(data.created_at);
         this.weather = {
           ...data,
@@ -65,8 +64,7 @@ export class HomeComponent implements OnInit {
   async refreshWindData(): Promise<void> {
     try {
       const wind: WindData = await firstValueFrom(this.apiService.getWindData());
-      const timestamp = this.timestampService.getFormattedTimestamp();
-      this.weather.timestamp = timestamp;
+      this.weather.timestamp = this.timestampService.formatDateString(wind.timestamp);
       this.weather.wind_speed = wind.wind_speed;
       this.weather.wind_direction = wind.wind_direction;
 

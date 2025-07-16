@@ -1,6 +1,9 @@
 import { Injectable } from '@angular/core';
-import { createClient, SupabaseClient } from '@supabase/supabase-js';
+import { createClient, LockFunc, SupabaseClient } from '@supabase/supabase-js';
 import { environment } from '../../environments/environment';
+
+const noLock: LockFunc = async (key, acquireTimeout, callback) => callback();
+
 
 @Injectable({
   providedIn: 'root'
@@ -11,7 +14,14 @@ export class SupabaseClientService {
   constructor() {
     this.supabaseClient = createClient(
       environment.supabaseUrl,
-      environment.supabaseApiKey
+      environment.supabaseApiKey,
+  {
+    auth: {
+      persistSession: true,
+      autoRefreshToken: true,
+      lock: noLock  
+    }
+  }
     );
   }
 }
