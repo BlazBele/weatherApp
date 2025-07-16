@@ -12,7 +12,7 @@ const routes: Routes = [
   { path: '', component: HomeComponent },
   { path: 'home', component: HomeComponent },
   { path: 'login', component: LoginComponent },
-  { path: 'export', component: ExportComponent},
+  { path: 'export', component: ExportComponent, canActivate: [AuthGuard] },
   { path: 'admin', component: AdminDashboardComponent, canActivate: [AuthGuard] },
   { path: 'sql', component: EditSqlComponent, canActivate: [AuthGuard]},
   { path: 'machineLearning', component: MachineLearningComponent, canActivate: [AuthGuard]}
