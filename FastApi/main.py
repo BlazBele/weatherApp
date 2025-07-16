@@ -11,8 +11,11 @@ from pydantic import BaseModel
 from fastapi.responses import FileResponse
 
 import datetime
+import pytz
 from fastapi.middleware.cors import CORSMiddleware
 
+
+slovenia_tz = pytz.timezone("Europe/Ljubljana")
 # Initialize FastAPI app
 app = FastAPI(title="Rain Prediction API", 
               description="API for predicting rain based on weather data")
@@ -212,7 +215,7 @@ def train_xgboost_model():
             "status": "uspešno",
             "accuracy": round(float(acc),2),
             "message": f"Model uspešno učeno in shranjeno v {MODEL_PATH}. Točnost: {acc:.4f}",
-            "timestamp": datetime.datetime.now()
+            "timestamp": datetime.now(slovenia_tz)
         }
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Napaka pri učenju modela: {str(e)}")
@@ -242,7 +245,7 @@ def make_prediction(input_data: dict):
             "prediction": int(pred),
             "probability": float(prob),
             "message": "Napoved dežja: Dež bo" if pred == 1 else "Napoved dežja: Dežja ne bo",
-            "timestamp": datetime.datetime.now()
+            "timestamp": datetime.now(slovenia_tz)
         }
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Napaka pri napovedovanju: {str(e)}")
@@ -276,7 +279,7 @@ async def model_status():
         "model_loaded": model is not None,
         "model_path": MODEL_PATH,
         "data_path": DATA_PATH,
-        "timestamp": datetime.datetime.now()
+        "timestamp": datetime.now(slovenia_tz)
     }
 
 @app.get("/download")
