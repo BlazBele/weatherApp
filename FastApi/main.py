@@ -10,7 +10,7 @@ from fastapi import FastAPI, HTTPException
 from pydantic import BaseModel
 from fastapi.responses import FileResponse
 
-import datetime
+from datetime import datetime
 import pytz
 from fastapi.middleware.cors import CORSMiddleware
 
