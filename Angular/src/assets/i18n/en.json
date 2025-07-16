@@ -53,6 +53,7 @@
 },
   "nOfRowsExport": "Number of rows",
   "nOfRows": "Number of rows",
+  "exportData": "Export Data",
   "selectColumns": "Columns",
   "all": "All",
   "probability": "Probability",
