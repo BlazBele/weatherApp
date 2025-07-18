@@ -1,4 +1,4 @@
-<div class="container">
+<div class="container mt-5 mb-5">
   <div class="row g-3  border border-3 rounded p-3 mx-0">
     <div class="d-flex justify-content-end align-items-start w-100">
       <p class="me-2">
@@ -7,48 +7,53 @@
     </div>
 
     <div class="col-12 col-md mb-3 mb-md-0">
-      <div class="card h-100">
-        <div class="card-body">
-          <div class="d-flex flex-column align-items-center">
-            <app-trend-indicator
-              [currentValue]="weather.temperature"
-              [previousValue]="weather.previous_temperature || 0"
-              [dailyMin]="weather.daily_min_temperature ?? 0"
-              [dailyMax]="weather.daily_max_temperature ?? 30"
-              unit="°C"
-              [size]="300">
-            </app-trend-indicator>
+        <a href="/some-url">
+        <div class="card h-100">
+          <div class="card-body">
+              <div class="d-flex flex-column align-items-center">
+                <app-trend-indicator
+                [currentValue]="weather.temperature"
+                [previousValue]="weather.previous_temperature || 0"
+                [dailyMin]="weather.daily_min_temperature ?? 0"
+                [dailyMax]="weather.daily_max_temperature ?? 30"
+                unit="°C"
+                [size]="300">
+              </app-trend-indicator>
+            </div>
+            <h5 class="card-title">{{ 'temperature' | translate }}</h5>
+            <p class="card-text">{{ weather.temperature }} °C</p>
           </div>
-          <h5 class="card-title">{{ 'temperature' | translate }}</h5>
-          <p class="card-text">{{ weather.temperature }} °C</p>
         </div>
-      </div>
+      </a>
     </div>
 
     <div class="col-12 col-md mb-3 mb-md-0">
-      <div class="card h-100">
-        <div class="card-body">
-          <div class="d-flex flex-column align-items-center">
-            <app-trend-indicator
-              [currentValue]="weather.humidity"
-              [previousValue]="weather.previous_humidity || 0"
-              [dailyMin]="weather.daily_min_humidity ?? 0"
-              [dailyMax]="weather.daily_max_humidity ?? 100"
-              unit="%"
-              [size]="300">
-            </app-trend-indicator>
+      <a href="/some-url">
+        <div class="card h-100">
+          <div class="card-body">
+            <div class="d-flex flex-column align-items-center">
+              <app-trend-indicator
+                [currentValue]="weather.humidity"
+                [previousValue]="weather.previous_humidity || 0"
+                [dailyMin]="weather.daily_min_humidity ?? 0"
+                [dailyMax]="weather.daily_max_humidity ?? 100"
+                unit="%"
+                [size]="300">
+              </app-trend-indicator>
+            </div>
+            <h5 class="card-title">{{ 'humidity' | translate }}</h5>
+            <p class="card-text">{{ weather.humidity }} %</p>
           </div>
-          <h5 class="card-title">{{ 'humidity' | translate }}</h5>
-          <p class="card-text">{{ weather.humidity }} %</p>
         </div>
-      </div>
+      </a>
     </div>
 
     <div class="col-12 col-md mb-3 mb-md-0">
-      <div class="card h-100">
-        <div class="card-body">
-          <div class="d-flex flex-column align-items-center">
-            <app-trend-indicator
+      <a href="/some-url">
+        <div class="card h-100">
+          <div class="card-body">
+            <div class="d-flex flex-column align-items-center">
+              <app-trend-indicator
               [currentValue]="weather.pressure0"
               [previousValue]="weather.previous_pressure0 || 0"
               [dailyMin]="weather.daily_min_pressure0 ?? 1000"
@@ -61,7 +66,9 @@
           <p class="card-text">{{ weather.pressure0 }} hPa</p>
         </div>
       </div>
+      </a>
     </div>
+    
   </div>
 
   <div class="row g-3 mt-1 mt-lg-3 ">
@@ -76,6 +83,7 @@
 
         <div class="row g-3">
           <div class="col-12 col-md mb-3 mb-md-0">
+            <a href="/some-url">
             <div class="card h-100">
               <div class="card-body">
                 <div class="d-flex flex-column align-items-center">
@@ -92,6 +100,7 @@
                 <p class="card-text">{{ weather.wind_speed }} m/s</p>
               </div>
             </div>
+            </a>
           </div>
 
           <div class="col-12 col-md mb-3 mb-md-0">

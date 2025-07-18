@@ -1,0 +1,36 @@
+<div class="period-select">
+  <label for="period">{{ 'selectPeriod' | translate }}:</label>
+  <select id="period" [(ngModel)]="selectedPeriod" (change)="onPeriodChange()">
+    <option value="day">{{ 'day' | translate }}</option>
+    <option value="week">{{ 'week' | translate }}</option>
+    <option value="month">{{ 'month' | translate }}</option>
+    <option value="year">{{ 'year' | translate }}</option>
+    <option value="all">{{ 'all' | translate }}</option>
+    <option value="range">{{ 'range' | translate }}</option>
+  </select>
+</div>
+
+<div *ngIf="selectedPeriod === 'range'" class="date-range-picker">
+  <label>{{ 'from' | translate }}:</label>
+  <input type="date" [(ngModel)]="rangeStart" (change)="onRangeChange()" />
+  <label>{{ 'to' | translate }}:</label>
+  <input type="date" [(ngModel)]="rangeEnd" (change)="onRangeChange()" />
+</div>
+
+<div>
+  <apx-chart
+    #chart
+    [series]="chartOptions.series"
+    [chart]="chartOptions.chart"
+    [xaxis]="chartOptions.xaxis"
+    [dataLabels]="chartOptions.dataLabels"
+    [markers]="chartOptions.markers"
+    [title]="chartOptions.title"
+    [fill]="chartOptions.fill"
+    [tooltip]="chartOptions.tooltip"
+    [stroke]="chartOptions.stroke"
+    [annotations]="chartOptions.annotations"
+    [colors]="chartOptions.colors"
+    [yaxis]="chartOptions.yaxis"
+  ></apx-chart>
+</div>
