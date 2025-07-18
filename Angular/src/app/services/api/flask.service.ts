@@ -28,9 +28,9 @@ getWindData(): Observable<WindData> {
   } else {
     console.log("True wind data.")
     
-    return this.http.get<WeatherData>(`${this.apiUrl}/wind_data`, {
-      headers: { 'ngrok-skip-browser-warning': 'true' }
-    });
+  return this.http.get<WindData>(`${this.apiUrl}/wind_data`, {
+    headers: { 'ngrok-skip-browser-warning': 'true' }
+  });
 
   }
 }
