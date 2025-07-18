@@ -73,16 +73,15 @@ export class HomeComponent implements OnInit {
     }
   }
 
-  refreshRainPrediction(): void {
-    this.fastApiService.getRainPrediction().subscribe({
-      next: (data) => {
-        this.rainPrediction = data;
-        this.rainPrediction.timestamp = this.timestampService.formatDateString(data.timestamp);
-      },
-      error: (err) => {
-        console.error(err);
-      }
-    });
+  async refreshRainPrediction(): Promise<void> {
+    try {
+      const data = await firstValueFrom(this.fastApiService.getRainPrediction());
+      this.rainPrediction = data;
+      this.rainPrediction.timestamp = this.timestampService.formatDateString(data.timestamp);
+    } catch (error) {
+      console.error('Napaka pri osvežitvi napovedi dežja:', error);
+    }
   }
+
 
 }
