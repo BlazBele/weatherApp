@@ -21,7 +21,6 @@ import { MachineLearningComponent } from './components/pages/machine-learning/ma
 import { ExportComponent } from './components/pages/export/export.component';
 import { TemperatureComponent } from './components/pages/detail/temperature/temperature.component';
 import { BaseChartDirective, provideCharts, withDefaultRegisterables } from 'ng2-charts';
-import { DetailComponent } from './components/pages/detail/detail.component';
 import { HumidityComponent } from './components/pages/detail/humidity/humidity.component';
 import { PressureComponent } from './components/pages/detail/pressure/pressure.component';
 import { WindSpeedComponent } from './components/pages/detail/wind-speed/wind-speed.component';
@@ -48,7 +47,6 @@ export function HttpLoaderFactory(http: HttpClient){
     ExportComponent,
     MachineLearningComponent,
     TemperatureComponent,
-    DetailComponent,
     HumidityComponent,
     PressureComponent,
     WindSpeedComponent

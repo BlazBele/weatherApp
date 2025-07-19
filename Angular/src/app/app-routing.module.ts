@@ -8,7 +8,6 @@ import { EditSqlComponent } from './components/pages/edit-sql/edit-sql.component
 import { MachineLearningComponent } from './components/pages/machine-learning/machine-learning.component';
 import { ExportComponent } from './components/pages/export/export.component';
 import { TemperatureComponent } from './components/pages/detail/temperature/temperature.component';
-import { DetailComponent } from './components/pages/detail/detail.component';
 import { HumidityComponent } from './components/pages/detail/humidity/humidity.component';
 import { PressureComponent } from './components/pages/detail/pressure/pressure.component';
 import { WindSpeedComponent } from './components/pages/detail/wind-speed/wind-speed.component';
@@ -21,7 +20,6 @@ const routes: Routes = [
   { path: 'admin', component: AdminDashboardComponent, canActivate: [AuthGuard] },
   { path: 'sql', component: EditSqlComponent, canActivate: [AuthGuard]},
   { path: 'machineLearning', component: MachineLearningComponent, canActivate: [AuthGuard]},
-  { path: 'detail/:type', component: DetailComponent },
   { path: 'temperature', component: TemperatureComponent},
   { path: 'humidity', component: HumidityComponent},
   { path: 'pressure', component: PressureComponent},
