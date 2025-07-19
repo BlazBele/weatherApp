@@ -59,6 +59,18 @@
   "probability": "Probability",
   "RainPrediction3": "Will it rain in 3 hours?",
   "rainTrue": "It will not rain!",
-  "rainFalse": "It will rain!"
+  "rainFalse": "It will rain!",
+
+  "pickPeriod" : "Pick period",
+  "day" : "Day",
+  "week" : "Week",
+  "month" : "Month",
+  "6month" : "6 Months",
+  "year" : "Year",
+  "customPeriod" : "Custom period",
+  "from" : "From",
+  "to" : "To",
+  "today" : "Today",
+  "show" : "Show"
 
 }

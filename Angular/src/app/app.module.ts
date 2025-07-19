@@ -19,6 +19,10 @@ import { AdminSidebarComponent } from './components/partials/admin-sidebar/admin
 
 import { MachineLearningComponent } from './components/pages/machine-learning/machine-learning.component';
 import { ExportComponent } from './components/pages/export/export.component';
+import { TemperatureComponent } from './components/pages/detail/temperature/temperature.component';
+import { BaseChartDirective, provideCharts, withDefaultRegisterables } from 'ng2-charts';
+
+
 
 
 export function HttpLoaderFactory(http: HttpClient){
@@ -37,22 +41,25 @@ export function HttpLoaderFactory(http: HttpClient){
     CompassComponent,
     AdminSidebarComponent,
     ExportComponent,
-    MachineLearningComponent
+    MachineLearningComponent,
+    TemperatureComponent
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
     FormsModule,
+    BaseChartDirective,
     TranslateModule.forRoot({
-      defaultLanguage: 'sl',
-      loader: {
-        provide: TranslateLoader,
-        useFactory: HttpLoaderFactory,
-        deps: [HttpClient]
-      }
+        defaultLanguage: 'sl',
+        loader: {
+            provide: TranslateLoader,
+            useFactory: HttpLoaderFactory,
+            deps: [HttpClient]
+        }
     })
-  ],
-  providers: [provideHttpClient()],
+
+],
+  providers: [provideHttpClient(), provideCharts(withDefaultRegisterables())],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

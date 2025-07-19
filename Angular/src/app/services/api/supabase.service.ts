@@ -3,6 +3,7 @@ import { WeatherData } from '../../interfaces/weather-data';
 import { environment } from '../../../environments/environment';
 import { from, Observable, of } from 'rxjs';
 import { SupabaseClientService } from '../supabase-client.service';
+import { endOfDay, startOfDay, subDays, subMonths, startOfMonth, endOfMonth } from 'date-fns';
 
 @Injectable({
   providedIn: 'root'
@@ -13,6 +14,88 @@ export class SupabaseService {
   get supabase() {
     return this.supabaseClientService.supabaseClient;
   }
+
+  getWeatherDataByPeriod(period: 'day' | 'week' | 'month' | '6months' | 'year'): Observable<WeatherData[]> {
+    const now = new Date();
+    let startDate: Date;
+    let endDate: Date = now;
+
+    switch (period) {
+      case 'day':
+        startDate = startOfDay(now);
+        endDate = endOfDay(now);
+        break;
+
+      case 'week':
+        startDate = subDays(now, 6); 
+        startDate = startOfDay(startDate);
+        endDate = endOfDay(now);
+        break;
+
+      case 'month':
+        startDate = subDays(now, 29); 
+        startDate = startOfDay(startDate);
+        endDate = endOfDay(now);
+        break;
+
+      case '6months':
+        startDate = subMonths(now, 6);
+        startDate = startOfMonth(startDate);
+        endDate = endOfMonth(now);
+        break;
+
+      case 'year':
+        startDate = subMonths(now, 12);
+        startDate = startOfMonth(startDate);
+        endDate = endOfMonth(now);
+        break;
+
+      default:
+        return of([]);
+    }
+
+    return from(
+      this.supabase
+        .from('VremenskiPodatki')
+        .select('*')
+        .gte('created_at', startDate.toISOString())
+        .lte('created_at', endDate.toISOString())
+        .order('created_at', { ascending: true })
+        .then(({ data, error }) => {
+          if (error) {
+            console.error('Supabase error:', error.message);
+            return [];
+          }
+          return data ?? [];
+        })
+    );
+
+  }
+
+  getWeatherDataByCustomRange(startDateStr: string, endDateStr: string): Observable<WeatherData[]> {
+    const start = `${startDateStr}T00:00:00`;
+    const end = `${endDateStr}T23:59:59`;
+
+    console.log('Custom range query:', start, end);
+
+    return from(
+      this.supabase
+        .from('VremenskiPodatki')
+        .select('*')
+        .gte('created_at', start)
+        .lte('created_at', end)
+        .order('created_at', { ascending: true })
+        .then(({ data, error }) => {
+          if (error) {
+            console.error('Supabase error:', error.message);
+            return [];
+          }
+          return data ?? [];
+        })
+    );
+  }
+
+
 
   getWeatherData(): Observable<WeatherData | null> {
     return from(
@@ -93,102 +176,102 @@ export class SupabaseService {
         return count ?? 0;
       })
   );
-}
+  }
 
-getWeatherDataTable(
-  fromIndex: number,
-  toIndex: number,
-  sortColumn: string = 'created_at',
-  sortDirection: 'asc' | 'desc' = 'desc'
-): Observable<any[]> {
-  return from(
-    this.supabase
-      .from('VremenskiPodatki')
-      .select('*')
-      .order(sortColumn, { ascending: sortDirection === 'asc' })
-      .range(fromIndex, toIndex)
-      .then(({ data, error }) => {
-        if (error) {
-          console.error('Supabase error:', error.message);
-          throw error;
-        }
-        return data ?? [];
-      })
-  );
-}
-
-
-exportWeatherData(
-  limit: number = 100,
-  sortColumn: string = 'created_at',
-  sortDirection: 'asc' | 'desc' = 'desc'
-): Observable<any[]> {
-  return from(
-    this.supabase
-      .from('VremenskiPodatki')
-      .select('*')
-      .order(sortColumn, { ascending: sortDirection === 'asc' })
-      .limit(limit)
-      .then(({ data, error }) => {
-        if (error) {
-          console.error('Supabase error:', error.message);
-          return [];
-        }
-        return data ?? [];
-      })
-  );
-}
+  getWeatherDataTable(
+    fromIndex: number,
+    toIndex: number,
+    sortColumn: string = 'created_at',
+    sortDirection: 'asc' | 'desc' = 'desc'
+  ): Observable<any[]> {
+    return from(
+      this.supabase
+        .from('VremenskiPodatki')
+        .select('*')
+        .order(sortColumn, { ascending: sortDirection === 'asc' })
+        .range(fromIndex, toIndex)
+        .then(({ data, error }) => {
+          if (error) {
+            console.error('Supabase error:', error.message);
+            throw error;
+          }
+          return data ?? [];
+        })
+    );
+  }
 
 
-deleteWeatherEntry(id: number): Observable<boolean> {
-  return from(
-    this.supabase
-      .from('VremenskiPodatki')
-      .delete()
-      .eq('id', id)
-      .then(({ error }) => {
-        if (error) {
-          console.error('Napaka pri brisanju:', error.message);
-          return false;
-        }
-        return true;
-      })
-  );
-}
+  exportWeatherData(
+    limit: number = 100,
+    sortColumn: string = 'created_at',
+    sortDirection: 'asc' | 'desc' = 'desc'
+  ): Observable<any[]> {
+    return from(
+      this.supabase
+        .from('VremenskiPodatki')
+        .select('*')
+        .order(sortColumn, { ascending: sortDirection === 'asc' })
+        .limit(limit)
+        .then(({ data, error }) => {
+          if (error) {
+            console.error('Supabase error:', error.message);
+            return [];
+          }
+          return data ?? [];
+        })
+    );
+  }
 
 
-getWeatherEntryById(id: number): Observable<WeatherData | null> {
-  return from(
-    this.supabase
-      .from('VremenskiPodatki')
-      .select('*')
-      .eq('id', id)
-      .single()
-      .then(({ data, error }) => {
-        if (error) {
-          console.error('Napaka pri pridobivanju podatka:', error.message);
-          return null;
-        }
-        return data;
-      })
-  );
-}
+  deleteWeatherEntry(id: number): Observable<boolean> {
+    return from(
+      this.supabase
+        .from('VremenskiPodatki')
+        .delete()
+        .eq('id', id)
+        .then(({ error }) => {
+          if (error) {
+            console.error('Napaka pri brisanju:', error.message);
+            return false;
+          }
+          return true;
+        })
+    );
+  }
 
-updateWeatherEntry(id: number, updatedData: Partial<WeatherData>): Observable<boolean> {
-  return from(
-    this.supabase
-      .from('VremenskiPodatki')
-      .update(updatedData)
-      .eq('id', id)
-      .then(({ error }) => {
-        if (error) {
-          console.error('Napaka pri posodabljanju:', error.message);
-          return false;
-        }
-        return true;
-      })
-  );
-}
+
+  getWeatherEntryById(id: number): Observable<WeatherData | null> {
+    return from(
+      this.supabase
+        .from('VremenskiPodatki')
+        .select('*')
+        .eq('id', id)
+        .single()
+        .then(({ data, error }) => {
+          if (error) {
+            console.error('Napaka pri pridobivanju podatka:', error.message);
+            return null;
+          }
+          return data;
+        })
+    );
+  }
+
+  updateWeatherEntry(id: number, updatedData: Partial<WeatherData>): Observable<boolean> {
+    return from(
+      this.supabase
+        .from('VremenskiPodatki')
+        .update(updatedData)
+        .eq('id', id)
+        .then(({ error }) => {
+          if (error) {
+            console.error('Napaka pri posodabljanju:', error.message);
+            return false;
+          }
+          return true;
+        })
+    );
+  }
 
 
 

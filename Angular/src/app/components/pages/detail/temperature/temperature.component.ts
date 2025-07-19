@@ -1,165 +1,368 @@
-import { Component, ViewChild } from '@angular/core';
-
-export type ChartOptions = {
-  series: any;
-  chart: any;
-  dataLabels: any;
-  markers: any;
-  title: any;
-  fill: any;
-  yaxis: any;
-  xaxis: any;
-  tooltip: any;
-  stroke: any;
-  annotations: any;
-  colors: any;
-};
-
+import { Component, OnInit } from '@angular/core';
+import { ChartConfiguration } from 'chart.js';
+import { SupabaseService } from '../../../../services/api/supabase.service';
+import { WeatherData } from '../../../../interfaces/weather-data';
 
 @Component({
   selector: 'app-temperature',
-  standalone: false,
   templateUrl: './temperature.component.html',
-  styleUrl: './temperature.component.scss'
+  standalone: false,
+  styleUrls: ['./temperature.component.scss'],
 })
-export class TemperatureComponent{
-  @ViewChild('chart', { static: false }) chart: ChartComponent;
-  public chartOptions: Partial<ChartOptions>;
-  selectedPeriod: string = 'day';
-  rangeStart: string;
-  rangeEnd: string;
+export class TemperatureComponent implements OnInit {
+  public selectedDate: string = new Date().toISOString().split('T')[0];
+  customStartDate: string = '';
+  customEndDate: string = '';
+  selectedPeriod: 'day' | 'week' | 'month' | '6months' | 'year' | 'custom' = 'day';
+  public tempMin: number | null = null;
+  public tempMax: number | null = null;
+  public tempAvg: number | null = null;
 
-  constructor(private translate: TranslateService) {
-    this.initChart();
+  today: string = new Date().toISOString().split('T')[0];
+
+  public lineChartData: ChartConfiguration<'line'>['data'] = {
+    labels: [],
+    datasets: [
+      {
+        data: [],
+        label: 'Temperatura °C',
+        fill: true,
+        tension: 0.4,
+        borderColor: 'blue',
+        backgroundColor: 'rgba(0,123,255,0.2)',
+        pointBackgroundColor: 'blue',
+      },
+    ],
+  };
+
+  public lineChartOptions: ChartConfiguration<'line'>['options'] = {
+    responsive: true,
+    maintainAspectRatio: false,
+    
+  };
+
+  constructor(private supabaseService: SupabaseService) {}
+
+  ngOnInit(): void {
+    this.updateChartData();
   }
 
-  initChart() {
-    this.chartOptions = {
-      series: [
-        {
-          name: this.translate.instant('temperature'),
-          data: this.getDataForPeriod(this.selectedPeriod)
+  onPeriodChange(): void {
+    this.updateChartData();
+  }
+
+  onDateChange(newDate: string): void {
+    this.selectedDate = newDate;
+    if (this.selectedPeriod === 'day') {
+      this.updateChartData();
+    }
+  }
+
+  updateChartData(): void {
+    if (this.selectedPeriod === 'day') {
+      this.supabaseService
+        .getWeatherDataByCustomRange(this.selectedDate, this.selectedDate)
+        .subscribe((data) => {
+          this.processData(data ?? []);
+        });
+    } else if (this.selectedPeriod === 'custom') {
+      if (!this.customStartDate || !this.customEndDate) return;
+      this.supabaseService
+        .getWeatherDataByCustomRange(this.customStartDate, this.customEndDate)
+        .subscribe((data) => {
+          this.processData(data ?? []);
+        });
+    } else {
+      this.supabaseService
+        .getWeatherDataByPeriod(this.selectedPeriod)
+        .subscribe((data) => {
+          this.processData(data ?? []);
+        });
+    }
+  }
+
+  setToday(): void {
+    this.selectedDate = this.today;
+    if (this.selectedPeriod === 'day') {
+      this.updateChartData();
+    }
+  }
+  
+  getWeekNumber(d: Date): number {
+    const date = new Date(Date.UTC(d.getFullYear(), d.getMonth(), d.getDate()));
+    const dayNum = date.getUTCDay() || 7;
+    date.setUTCDate(date.getUTCDate() + 4 - dayNum);
+    const yearStart = new Date(Date.UTC(date.getUTCFullYear(), 0, 1));
+    return Math.ceil(
+      ((date.getTime() - yearStart.getTime()) / 86400000 + 1) / 7
+    );
+  }
+
+  processData(data: WeatherData[]): void {
+    if (!data || data.length === 0) {
+      this.lineChartData.labels = [];
+      this.lineChartData.datasets[0].data = [];
+      return;
+    }
+
+    const labels: string[] = [];
+    const temperatures: number[] = [];
+
+    switch (this.selectedPeriod) {
+      case 'day': {
+        const selected = new Date(this.selectedDate);
+        const dayData = data.filter((d) => {
+          const date = new Date(d.created_at);
+          return date.toDateString() === selected.toDateString();
+        });
+        dayData.sort(
+          (a, b) =>
+            new Date(a.created_at).getTime() - new Date(b.created_at).getTime()
+        );
+
+        dayData.forEach((d) => {
+          const date = new Date(d.created_at);
+          const label = date.toLocaleTimeString('sl-SI', {
+            hour: '2-digit',
+            minute: '2-digit',
+          });
+          labels.push(label);
+          temperatures.push(d.temperature ?? NaN);
+        });
+        console.log(labels);
+        console.log(temperatures);
+        break;
+      }
+
+      case 'week':
+      case 'month': {
+        const groupedBy6Hour = new Map<string, WeatherData[]>();
+        data.forEach((d) => {
+          const dt = new Date(d.created_at);
+          const roundedHour = Math.floor(dt.getHours() / 6) * 6;
+          const label = `${dt.toLocaleDateString('sl-SI')} ${roundedHour
+            .toString()
+            .padStart(2, '0')}:00`;
+          if (!groupedBy6Hour.has(label)) {
+            groupedBy6Hour.set(label, []);
+          }
+          groupedBy6Hour.get(label)!.push(d);
+        });
+
+        const sortedLabels = Array.from(groupedBy6Hour.keys()).sort(
+          (a, b) => new Date(a).getTime() - new Date(b).getTime()
+        );
+
+        sortedLabels.forEach((label) => {
+          const vals = groupedBy6Hour.get(label)!;
+          const avgTemp =
+            vals.reduce((sum, curr) => sum + (curr.temperature ?? 0), 0) /
+            vals.length;
+          labels.push(label);
+          temperatures.push(+avgTemp.toFixed(1));
+        });
+        break;
+      }
+
+      case '6months':
+      case 'year': {
+        const groupedByDate = new Map<string, WeatherData[]>();
+
+        data.forEach((d) => {
+          const dt = new Date(d.created_at);
+          const label = dt.toLocaleDateString('sl-SI');
+          if (!groupedByDate.has(label)) groupedByDate.set(label, []);
+          groupedByDate.get(label)!.push(d);
+        });
+
+        const sortedDates = Array.from(groupedByDate.keys()).sort(
+          (a, b) => new Date(a).getTime() - new Date(b).getTime()
+        );
+
+        sortedDates.forEach((date) => {
+          const vals = groupedByDate.get(date)!;
+          const avgTemp =
+            vals.reduce((sum, curr) => sum + (curr.temperature ?? 0), 0) /
+            vals.length;
+          labels.push(date);
+          temperatures.push(+avgTemp.toFixed(1));
+        });
+        break;
+      }
+
+      case 'custom': {
+        const from = new Date(this.customStartDate);
+        const to = new Date(this.customEndDate);
+        const diffDays =
+          Math.ceil((to.getTime() - from.getTime()) / (1000 * 60 * 60 * 24)) +
+          1;
+
+        if (diffDays <= 3) {
+          // ⏰ Združevanje po urah
+          const groupedByHour = new Map<string, WeatherData[]>();
+          data.forEach((d) => {
+            const dt = new Date(d.created_at);
+            const label = dt.toLocaleString('sl-SI', {
+              year: 'numeric',
+              month: '2-digit',
+              day: '2-digit',
+              hour: '2-digit',
+            });
+            if (!groupedByHour.has(label)) groupedByHour.set(label, []);
+            groupedByHour.get(label)!.push(d);
+          });
+
+          const sortedLabels = Array.from(groupedByHour.keys()).sort(
+            (a, b) => new Date(a).getTime() - new Date(b).getTime()
+          );
+
+          sortedLabels.forEach((label) => {
+            const vals = groupedByHour.get(label)!;
+            const avgTemp =
+              vals.reduce((sum, curr) => sum + (curr.temperature ?? 0), 0) /
+              vals.length;
+            labels.push(label);
+            temperatures.push(+avgTemp.toFixed(1));
+          });
+        } else if (diffDays <= 30) {
+          const groupedBy6Hours = new Map<string, WeatherData[]>();
+          data.forEach((d) => {
+            const dt = new Date(d.created_at);
+            const roundedHour = Math.floor(dt.getHours() / 6) * 6;
+            const roundedDate = new Date(
+              dt.getFullYear(),
+              dt.getMonth(),
+              dt.getDate(),
+              roundedHour
+            );
+
+            const label = roundedDate.toLocaleString('sl-SI', {
+              year: 'numeric',
+              month: '2-digit',
+              day: '2-digit',
+              hour: '2-digit',
+              minute: '2-digit',
+            });
+
+            if (!groupedBy6Hours.has(label)) groupedBy6Hours.set(label, []);
+            groupedBy6Hours.get(label)!.push(d);
+          });
+
+          const sortedLabels = Array.from(groupedBy6Hours.keys()).sort(
+            (a, b) => new Date(a).getTime() - new Date(b).getTime()
+          );
+
+          sortedLabels.forEach((label) => {
+            const vals = groupedBy6Hours.get(label)!;
+            const avgTemp =
+              vals.reduce((sum, curr) => sum + (curr.temperature ?? 0), 0) /
+              vals.length;
+            labels.push(label);
+            temperatures.push(+avgTemp.toFixed(1));
+          });
+        } else {
+          const groupedByWeek = new Map<string, WeatherData[]>();
+          data.forEach((d) => {
+            const dt = new Date(d.created_at);
+            const year = dt.getFullYear();
+            const weekNumber = this.getWeekNumber(dt);
+            const label = `${year}-W${weekNumber.toString().padStart(2, '0')}`;
+            if (!groupedByWeek.has(label)) groupedByWeek.set(label, []);
+            groupedByWeek.get(label)!.push(d);
+          });
+
+          const sortedWeeks = Array.from(groupedByWeek.keys()).sort((a, b) =>
+            a.localeCompare(b)
+          );
+
+          sortedWeeks.forEach((week) => {
+            const vals = groupedByWeek.get(week)!;
+            const avgTemp =
+              vals.reduce((sum, curr) => sum + (curr.temperature ?? 0), 0) /
+              vals.length;
+            labels.push(week);
+            temperatures.push(+avgTemp.toFixed(1));
+          });
         }
-      ],
-      chart: {
-        type: 'area',
-        height: 350,
-        toolbar: { show: true }
-      },
-      dataLabels: { enabled: false },
-      markers: { size: 0 },
-      xaxis: {
-        type: 'datetime',
-        tickAmount: 6,
-        min: this.getMinDateForPeriod(this.selectedPeriod),
-        max: this.getMaxDateForPeriod(this.selectedPeriod)
-      },
-      tooltip: {
-        x: { format: 'dd MMM yyyy' }
-      },
-      fill: {
-        type: 'gradient',
-        gradient: { shadeIntensity: 1, opacityFrom: 0.7, opacityTo: 0.9, stops: [0, 100] }
-      },
-      title: {
-        text: this.translate.instant('temperatureOverTime'),
-        align: 'left'
-      },
-      yaxis: {
-        title: { text: '°C' }
-      },
-      stroke: { curve: 'smooth' },
-      annotations: { xaxis: [], yaxis: [] },
-      colors: ['#008FFB']
+
+        break;
+      }
+    }
+
+    // Izračun vrednosti
+    if (temperatures.length > 0) {
+      this.tempMin = Math.min(...temperatures);
+      this.tempMax = Math.max(...temperatures);
+      this.tempAvg =
+        temperatures.reduce((sum, val) => sum + val, 0) / temperatures.length;
+    } else {
+      this.tempMin = null;
+      this.tempMax = null;
+      this.tempAvg = null;
+    }
+
+    // Trendna črta – izračunaj linearni regresijski trend
+    const temperatureDataset = {
+      ...this.lineChartData.datasets[0],
+      data: temperatures,
+    };
+
+    // Nato pripravi dataset za trendno črto
+    let trendlineDataset = null;
+
+    if (temperatures.length > 1) {
+      const n = temperatures.length;
+      const x = Array.from({ length: n }, (_, i) => i);
+      const y = temperatures;
+
+      const avgX = x.reduce((a, b) => a + b, 0) / n;
+      const avgY = y.reduce((a, b) => a + b, 0) / n;
+
+      const numerator = x.reduce(
+        (sum, xi, i) => sum + (xi - avgX) * (y[i] - avgY),
+        0
+      );
+      const denominator = x.reduce((sum, xi) => sum + (xi - avgX) ** 2, 0);
+      const slope = numerator / denominator;
+      const intercept = avgY - slope * avgX;
+
+      const trendData = x.map((xi) => +(intercept + slope * xi).toFixed(2));
+
+      trendlineDataset = {
+        label: 'Trendna črta',
+        data: trendData,
+        borderColor: 'red',
+        borderDash: [5, 5],
+        fill: false,
+        tension: 0.1,
+        pointRadius: 0,
+      };
+    }
+
+    // Zdaj nastavi labels in datasets skupaj
+    this.lineChartData = {
+      labels,
+      datasets: trendlineDataset
+        ? [temperatureDataset, trendlineDataset]
+        : [temperatureDataset],
     };
   }
 
-  onPeriodChange() {
-    if (this.selectedPeriod !== 'range') {
-      this.rangeStart = null;
-      this.rangeEnd = null;
-      this.updateChart();
+  
+  loadCustomRange(): void {
+    if (!this.customStartDate || !this.customEndDate) return;
+
+    const from = new Date(this.customStartDate);
+    const to = new Date(this.customEndDate);
+    if (from > to) {
+      alert('Datum "Od" ne sme biti po datumu "Do".');
+      return;
     }
-  }
 
-  onRangeChange() {
-    if (this.rangeStart && this.rangeEnd) {
-      this.updateChart();
-    }
-  }
-
-  updateChart() {
-    const data = this.selectedPeriod === 'range' && this.rangeStart && this.rangeEnd
-      ? this.getDataForRange(this.rangeStart, this.rangeEnd)
-      : this.getDataForPeriod(this.selectedPeriod);
-
-    this.chart.updateOptions({
-      series: [{ data }],
-      xaxis: {
-        min: this.selectedPeriod === 'range' ? new Date(this.rangeStart).getTime() : this.getMinDateForPeriod(this.selectedPeriod),
-        max: this.selectedPeriod === 'range' ? new Date(this.rangeEnd).getTime() : this.getMaxDateForPeriod(this.selectedPeriod)
-      }
-    }, false, true, true);
-  }
-
-  getDataForPeriod(period: string) {
-    // Tukaj simuliraš ali kličes API glede na period
-    // Za demo: vrni naključne podatke s časovnimi oznakami
-    const now = new Date();
-
-    switch (period) {
-      case 'day': {
-        // podatki po urah danes
-        return Array.from({ length: 24 }, (_, i) => [new Date(now.getFullYear(), now.getMonth(), now.getDate(), i).getTime(), 15 + Math.random() * 10]);
-      }
-      case 'week': {
-        // podatki za zadnjih 7 dni
-        return Array.from({ length: 7 }, (_, i) => [now.getTime() - (6 - i) * 86400000, 15 + Math.random() * 10]);
-      }
-      case 'month': {
-        // podatki za zadnjih 30 dni
-        return Array.from({ length: 30 }, (_, i) => [now.getTime() - (29 - i) * 86400000, 15 + Math.random() * 10]);
-      }
-      case 'year': {
-        // podatki za zadnjih 12 mesecev (prikaz po mesecih)
-        return Array.from({ length: 12 }, (_, i) => [new Date(now.getFullYear(), now.getMonth() - (11 - i), 1).getTime(), 5 + Math.random() * 20]);
-      }
-      case 'all': {
-        // npr. podatki za 3 leta
-        return Array.from({ length: 1095 }, (_, i) => [now.getTime() - (1094 - i) * 86400000, 10 + Math.random() * 15]);
-      }
-      default:
-        return [];
-    }
-  }
-
-  getDataForRange(start: string, end: string) {
-    const startDate = new Date(start);
-    const endDate = new Date(end);
-    const days = Math.floor((endDate.getTime() - startDate.getTime()) / 86400000) + 1;
-
-    return Array.from({ length: days }, (_, i) => [startDate.getTime() + i * 86400000, 15 + Math.random() * 10]);
-  }
-
-  getMinDateForPeriod(period: string) {
-    const now = new Date();
-    switch (period) {
-      case 'day':
-        return new Date(now.getFullYear(), now.getMonth(), now.getDate()).getTime();
-      case 'week':
-        return now.getTime() - 6 * 86400000;
-      case 'month':
-        return now.getTime() - 29 * 86400000;
-      case 'year':
-        return new Date(now.getFullYear(), now.getMonth() - 11, 1).getTime();
-      case 'all':
-        return now.getTime() - 1094 * 86400000;
-      default:
-        return undefined;
-    }
-  }
-
-  getMaxDateForPeriod(period: string) {
-    return new Date().getTime();
+    this.supabaseService
+      .getWeatherDataByCustomRange(this.customStartDate, this.customEndDate)
+      .subscribe((data) => {
+        this.processData(data ?? []);
+      });
   }
 }

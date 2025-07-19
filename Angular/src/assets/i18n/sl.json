@@ -60,6 +60,19 @@
   "probability": "Verjetnost",
   "RainPrediction3": "Ali bo padal dež čez 3 ure?",
   "rainTrue" : "Dežja ne bo!",
-  "rainFalse" : "Dež bo padal!"
+  "rainFalse" : "Dež bo padal!",
+
+  "pickPeriod" : "Izberi obdobje",
+  "day" : "Dan",
+  "week" : "Teden",
+  "month" : "Mesec",
+  "6month" : "6 Mesecev",
+  "year" : "Leto",
+  "customPeriod" : "Območje",
+  "from" : "Od",
+  "to" : "Do",
+  "today" : "Danes",
+  "show" : "Prikaži"
+
 
 }

@@ -7,6 +7,7 @@ import { LoginComponent } from './components/pages/auth/login/login.component';
 import { EditSqlComponent } from './components/pages/edit-sql/edit-sql.component';
 import { MachineLearningComponent } from './components/pages/machine-learning/machine-learning.component';
 import { ExportComponent } from './components/pages/export/export.component';
+import { TemperatureComponent } from './components/pages/detail/temperature/temperature.component';
 
 const routes: Routes = [
   { path: '', component: HomeComponent },
@@ -15,7 +16,8 @@ const routes: Routes = [
   { path: 'export', component: ExportComponent, canActivate: [AuthGuard] },
   { path: 'admin', component: AdminDashboardComponent, canActivate: [AuthGuard] },
   { path: 'sql', component: EditSqlComponent, canActivate: [AuthGuard]},
-  { path: 'machineLearning', component: MachineLearningComponent, canActivate: [AuthGuard]}
+  { path: 'machineLearning', component: MachineLearningComponent, canActivate: [AuthGuard]},
+  { path: 'temperature', component: TemperatureComponent}
 
 
 ];
