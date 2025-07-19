@@ -1,6 +1,6 @@
 <div class="container">
-  <h1 class="mb-5">{{'temperature' | translate }}</h1>
-  <div class="temperature-container" style="height: 400px; width: 100%;">
+  <h1 class="mb-5">{{'humidity' | translate }}</h1>
+  <div class="humidity-container" style="height: 400px; width: 100%;">
     <div class="mb-3 d-flex align-items-center">
       <h3>{{ 'pickPeriod' | translate }}: &nbsp;</h3>
       <select id="periodSelect" class="form-select w-auto" [(ngModel)]="selectedPeriod" (change)="onPeriodChange()">
@@ -28,15 +28,10 @@
       <button type="button" class="btn btn-primary ms-2" (click)="loadCustomRange()" [disabled]="!customStartDate || !customEndDate">{{'show' | translate}}</button>
     </div>
     <div class="stats">
-        <span class="me-3">Min: {{ min !== null ? min.toFixed(1) + ' °C' : '–' }}</span>
-        <span class="me-3">{{minDate}}</span>
+        <span class="me-3">Min: {{ min !== null ? min.toFixed(1) + ' %' : '–' }}</span>
+        <span class="me-3">Max: {{ max !== null ? max.toFixed(1) + ' %' : '–' }}</span>
+        <span class="me-3">Avg: {{ avg !== null ? avg.toFixed(1) + ' %': '-'}}</span>
     </div>
-    <div class="stats">
-      <span class="me-3">Max: {{ max !== null ? max.toFixed(1) + ' °C' : '–' }}</span>
-      <span class="me-3">{{maxDate}}</span>
-    </div>
-    <span class="me-3">Avg: {{ avg !== null ? avg.toFixed(1) + ' °C': '-'}}</span>
-
     <canvas baseChart
             [data]="lineChartData"
             [options]="lineChartOptions"

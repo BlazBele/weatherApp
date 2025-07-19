@@ -2,23 +2,20 @@ import { Component} from '@angular/core';
 import { ChartConfiguration } from 'chart.js';
 import { SupabaseService } from '../../../../services/api/supabase.service';
 import { WeatherData } from '../../../../interfaces/weather-data';
-import { TimestampService } from '../../../../services/timestamp.service';
 
 @Component({
-  selector: 'app-temperature',
-  templateUrl: './temperature.component.html',
+  selector: 'app-humidity',
   standalone: false,
-  styleUrls: ['./temperature.component.scss'],
+  templateUrl: './humidity.component.html',
+  styleUrl: './humidity.component.scss'
 })
-export class TemperatureComponent {
+export class HumidityComponent {
   public selectedDate: string = new Date().toISOString().split('T')[0];
   customStartDate: string = '';
   customEndDate: string = '';
   selectedPeriod: 'day' | 'week' | 'month' | '6months' | 'year' | 'custom' = 'day';
   public min: number | null = null;
-  public minDate: string | null = null;
   public max: number | null = null;
-  public maxDate: string | null = null;
   public avg: number | null = null;
 
   today: string = new Date().toISOString().split('T')[0];
@@ -44,8 +41,7 @@ export class TemperatureComponent {
     
   };
 
-
-  constructor(private supabaseService: SupabaseService, private timestampService: TimestampService) {}
+  constructor(private supabaseService: SupabaseService) {}
 
   ngOnInit(): void {
     this.updateChartData();
@@ -110,7 +106,7 @@ export class TemperatureComponent {
     }
 
     const labels: string[] = [];
-    const temperatures: number[] = [];
+    const humidities: number[] = [];
 
     switch (this.selectedPeriod) {
       case 'day': {
@@ -131,10 +127,10 @@ export class TemperatureComponent {
             minute: '2-digit',
           });
           labels.push(label);
-          temperatures.push(d.temperature ?? NaN);
+          humidities.push(d.humidity ?? NaN);
         });
         console.log(labels);
-        console.log(temperatures);
+        console.log(humidities);
         break;
       }
 
@@ -160,10 +156,10 @@ export class TemperatureComponent {
         sortedLabels.forEach((label) => {
           const vals = groupedBy6Hour.get(label)!;
           const avgTemp =
-            vals.reduce((sum, curr) => sum + (curr.temperature ?? 0), 0) /
+            vals.reduce((sum, curr) => sum + (curr.humidity ?? 0), 0) /
             vals.length;
           labels.push(label);
-          temperatures.push(+avgTemp.toFixed(1));
+          humidities.push(+avgTemp.toFixed(1));
         });
         break;
       }
@@ -186,10 +182,10 @@ export class TemperatureComponent {
         sortedDates.forEach((date) => {
           const vals = groupedByDate.get(date)!;
           const avgTemp =
-            vals.reduce((sum, curr) => sum + (curr.temperature ?? 0), 0) /
+            vals.reduce((sum, curr) => sum + (curr.humidity ?? 0), 0) /
             vals.length;
           labels.push(date);
-          temperatures.push(+avgTemp.toFixed(1));
+          humidities.push(+avgTemp.toFixed(1));
         });
         break;
       }
@@ -223,10 +219,10 @@ export class TemperatureComponent {
           sortedLabels.forEach((label) => {
             const vals = groupedByHour.get(label)!;
             const avgTemp =
-              vals.reduce((sum, curr) => sum + (curr.temperature ?? 0), 0) /
+              vals.reduce((sum, curr) => sum + (curr.humidity ?? 0), 0) /
               vals.length;
             labels.push(label);
-            temperatures.push(+avgTemp.toFixed(1));
+            humidities.push(+avgTemp.toFixed(1));
           });
         } else if (diffDays <= 30) {
           const groupedBy6Hours = new Map<string, WeatherData[]>();
@@ -259,10 +255,10 @@ export class TemperatureComponent {
           sortedLabels.forEach((label) => {
             const vals = groupedBy6Hours.get(label)!;
             const avgTemp =
-              vals.reduce((sum, curr) => sum + (curr.temperature ?? 0), 0) /
+              vals.reduce((sum, curr) => sum + (curr.humidity ?? 0), 0) /
               vals.length;
             labels.push(label);
-            temperatures.push(+avgTemp.toFixed(1));
+            humidities.push(+avgTemp.toFixed(1));
           });
         } else {
           const groupedByWeek = new Map<string, WeatherData[]>();
@@ -282,10 +278,10 @@ export class TemperatureComponent {
           sortedWeeks.forEach((week) => {
             const vals = groupedByWeek.get(week)!;
             const avgTemp =
-              vals.reduce((sum, curr) => sum + (curr.temperature ?? 0), 0) /
+              vals.reduce((sum, curr) => sum + (curr.humidity ?? 0), 0) /
               vals.length;
             labels.push(week);
-            temperatures.push(+avgTemp.toFixed(1));
+            humidities.push(+avgTemp.toFixed(1));
           });
         }
 
@@ -293,47 +289,31 @@ export class TemperatureComponent {
       }
     }
 
-    //Izračun vrednosti
-    const allValues = data
-    .map(d => ({
-      value: d.temperature,
-      date: d.created_at 
-    }))
-    .filter(v => v.value !== null && v.value !== undefined && !isNaN(v.value));
-
-  if (allValues.length > 0) {
-    const values = allValues.map(v => v.value);
-    this.min = Math.min(...values);
-    this.max = Math.max(...values);
-    this.avg = values.reduce((a, b) => a + b, 0) / values.length;
-
-    const minEntry = allValues.find(v => v.value === this.min);
-    const maxEntry = allValues.find(v => v.value === this.max);
-    if (minEntry && minEntry.date && maxEntry && maxEntry.date) {
-      this.minDate = this.timestampService.formatDateString(minEntry.date, 0); 
-      this.maxDate = this.timestampService.formatDateString(maxEntry.date, 0);
+    // Izračun vrednosti
+    if (humidities.length > 0) {
+      this.min = Math.min(...humidities);
+      this.max = Math.max(...humidities);
+      this.avg =
+        humidities.reduce((sum, val) => sum + val, 0) / humidities.length;
+    } else {
+      this.min = null;
+      this.max = null;
+      this.avg = null;
     }
-  } else {
-    this.min = null;
-    this.max = null;
-    this.avg = null;
-    this.minDate = null;
-    this.maxDate = null;
-  }
 
     // Trendna črta – izračunaj linearni regresijski trend
     const temperatureDataset = {
       ...this.lineChartData.datasets[0],
-      data: temperatures,
+      data: humidities,
     };
 
     // Nato pripravi dataset za trendno črto
     let trendlineDataset = null;
 
-    if (temperatures.length > 1) {
-      const n = temperatures.length;
+    if (humidities.length > 1) {
+      const n = humidities.length;
       const x = Array.from({ length: n }, (_, i) => i);
-      const y = temperatures;
+      const y = humidities;
 
       const avgX = x.reduce((a, b) => a + b, 0) / n;
       const avgY = y.reduce((a, b) => a + b, 0) / n;

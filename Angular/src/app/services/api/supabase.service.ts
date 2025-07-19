@@ -72,18 +72,15 @@ export class SupabaseService {
 
   }
 
-  getWeatherDataByCustomRange(startDateStr: string, endDateStr: string): Observable<WeatherData[]> {
-    const start = `${startDateStr}T00:00:00`;
-    const end = `${endDateStr}T23:59:59`;
-
-    console.log('Custom range query:', start, end);
-
+  getWeatherDataByCustomRange(startDate: string, endDate: string): Observable<WeatherData[]> {
+    startDate = `${startDate}T00:00:00`;
+    endDate = `${endDate}T23:59:59`;
     return from(
       this.supabase
         .from('VremenskiPodatki')
         .select('*')
-        .gte('created_at', start)
-        .lte('created_at', end)
+        .gte('created_at', startDate)
+        .lte('created_at', endDate)
         .order('created_at', { ascending: true })
         .then(({ data, error }) => {
           if (error) {
