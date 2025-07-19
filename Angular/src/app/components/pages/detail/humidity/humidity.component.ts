@@ -2,6 +2,7 @@ import { Component} from '@angular/core';
 import { ChartConfiguration } from 'chart.js';
 import { SupabaseService } from '../../../../services/api/supabase.service';
 import { WeatherData } from '../../../../interfaces/weather-data';
+import { TimestampService } from '../../../../services/timestamp.service';
 
 @Component({
   selector: 'app-humidity',
@@ -15,7 +16,9 @@ export class HumidityComponent {
   customEndDate: string = '';
   selectedPeriod: 'day' | 'week' | 'month' | '6months' | 'year' | 'custom' = 'day';
   public min: number | null = null;
+  public minDate: string | null = null;
   public max: number | null = null;
+  public maxDate: string | null = null;
   public avg: number | null = null;
 
   today: string = new Date().toISOString().split('T')[0];
@@ -25,7 +28,7 @@ export class HumidityComponent {
     datasets: [
       {
         data: [],
-        label: 'Temperatura °C',
+        label: 'Vlažnost [%]',
         fill: true,
         tension: 0.4,
         borderColor: 'blue',
@@ -41,7 +44,10 @@ export class HumidityComponent {
     
   };
 
-  constructor(private supabaseService: SupabaseService) {}
+  constructor(
+    private supabaseService: SupabaseService,
+    private timestampService: TimestampService
+  ) {}
 
   ngOnInit(): void {
     this.updateChartData();
@@ -289,16 +295,34 @@ export class HumidityComponent {
       }
     }
 
-    // Izračun vrednosti
-    if (humidities.length > 0) {
-      this.min = Math.min(...humidities);
-      this.max = Math.max(...humidities);
-      this.avg =
-        humidities.reduce((sum, val) => sum + val, 0) / humidities.length;
+    //Izračun vrednosti
+    const allValues = data
+      .map((d) => ({
+        value: d.temperature,
+        date: d.created_at,
+      }))
+      .filter(
+        (v) => v.value !== null && v.value !== undefined && !isNaN(v.value)
+      );
+
+    if (allValues.length > 0) {
+      const values = allValues.map((v) => v.value);
+      this.min = Math.min(...values);
+      this.max = Math.max(...values);
+      this.avg = values.reduce((a, b) => a + b, 0) / values.length;
+
+      const minEntry = allValues.find((v) => v.value === this.min);
+      const maxEntry = allValues.find((v) => v.value === this.max);
+      if (minEntry && minEntry.date && maxEntry && maxEntry.date) {
+        this.minDate = this.timestampService.formatDateString(minEntry.date, 0);
+        this.maxDate = this.timestampService.formatDateString(maxEntry.date, 0);
+      }
     } else {
       this.min = null;
       this.max = null;
       this.avg = null;
+      this.minDate = null;
+      this.maxDate = null;
     }
 
     // Trendna črta – izračunaj linearni regresijski trend

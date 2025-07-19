@@ -27,6 +27,7 @@
       
       <button type="button" class="btn btn-primary ms-2" (click)="loadCustomRange()" [disabled]="!customStartDate || !customEndDate">{{'show' | translate}}</button>
     </div>
+    
     <div class="stats">
         <span class="me-3">Min: {{ min !== null ? min.toFixed(1) + ' °C' : '–' }}</span>
         <span class="me-3">{{minDate}}</span>

@@ -1,4 +1,4 @@
-import { Component} from '@angular/core';
+import { Component } from '@angular/core';
 import { ChartConfiguration } from 'chart.js';
 import { SupabaseService } from '../../../../services/api/supabase.service';
 import { WeatherData } from '../../../../interfaces/weather-data';
@@ -28,7 +28,7 @@ export class TemperatureComponent {
     datasets: [
       {
         data: [],
-        label: 'Temperatura °C',
+        label: 'Temperatura [°C]',
         fill: true,
         tension: 0.4,
         borderColor: 'blue',
@@ -41,11 +41,12 @@ export class TemperatureComponent {
   public lineChartOptions: ChartConfiguration<'line'>['options'] = {
     responsive: true,
     maintainAspectRatio: false,
-    
   };
 
-
-  constructor(private supabaseService: SupabaseService, private timestampService: TimestampService) {}
+  constructor(
+    private supabaseService: SupabaseService,
+    private timestampService: TimestampService
+  ) {}
 
   ngOnInit(): void {
     this.updateChartData();
@@ -91,7 +92,7 @@ export class TemperatureComponent {
       this.updateChartData();
     }
   }
-  
+
   getWeekNumber(d: Date): number {
     const date = new Date(Date.UTC(d.getFullYear(), d.getMonth(), d.getDate()));
     const dayNum = date.getUTCDay() || 7;
@@ -295,31 +296,33 @@ export class TemperatureComponent {
 
     //Izračun vrednosti
     const allValues = data
-    .map(d => ({
-      value: d.temperature,
-      date: d.created_at 
-    }))
-    .filter(v => v.value !== null && v.value !== undefined && !isNaN(v.value));
+      .map((d) => ({
+        value: d.temperature,
+        date: d.created_at,
+      }))
+      .filter(
+        (v) => v.value !== null && v.value !== undefined && !isNaN(v.value)
+      );
 
-  if (allValues.length > 0) {
-    const values = allValues.map(v => v.value);
-    this.min = Math.min(...values);
-    this.max = Math.max(...values);
-    this.avg = values.reduce((a, b) => a + b, 0) / values.length;
+    if (allValues.length > 0) {
+      const values = allValues.map((v) => v.value);
+      this.min = Math.min(...values);
+      this.max = Math.max(...values);
+      this.avg = values.reduce((a, b) => a + b, 0) / values.length;
 
-    const minEntry = allValues.find(v => v.value === this.min);
-    const maxEntry = allValues.find(v => v.value === this.max);
-    if (minEntry && minEntry.date && maxEntry && maxEntry.date) {
-      this.minDate = this.timestampService.formatDateString(minEntry.date, 0); 
-      this.maxDate = this.timestampService.formatDateString(maxEntry.date, 0);
+      const minEntry = allValues.find((v) => v.value === this.min);
+      const maxEntry = allValues.find((v) => v.value === this.max);
+      if (minEntry && minEntry.date && maxEntry && maxEntry.date) {
+        this.minDate = this.timestampService.formatDateString(minEntry.date, 0);
+        this.maxDate = this.timestampService.formatDateString(maxEntry.date, 0);
+      }
+    } else {
+      this.min = null;
+      this.max = null;
+      this.avg = null;
+      this.minDate = null;
+      this.maxDate = null;
     }
-  } else {
-    this.min = null;
-    this.max = null;
-    this.avg = null;
-    this.minDate = null;
-    this.maxDate = null;
-  }
 
     // Trendna črta – izračunaj linearni regresijski trend
     const temperatureDataset = {
@@ -368,7 +371,6 @@ export class TemperatureComponent {
     };
   }
 
-  
   loadCustomRange(): void {
     if (!this.customStartDate || !this.customEndDate) return;
 
