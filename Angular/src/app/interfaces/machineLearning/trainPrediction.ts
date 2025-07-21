@@ -1,5 +1,5 @@
 export interface trainPrediction {
     timestamp: string;
-    status: string;
+    status: boolean;
     accuracy: number;
 }

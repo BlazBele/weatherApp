@@ -85,8 +85,15 @@
   "noData": "Click Predict.",
 
   "modelLoaded": "Is model loaded?",
-  "pathToModel": "Path to model:",
-  "pathToData": "Path to data:",
-  "timestamp": "Last updated:"
+  "pathToModel": "Path to model",
+  "pathToData": "Path to data",
+  "timestamp": "Last updated",
+
+  "statusSuccess": "Status: Success",
+  "statusUnsuccessful": "Status: Unsuccessful",
+  "accuracy": "Accuracy",
+  "prediction": "Prediction",
+  "rainYes": "It will rain",
+  "rainNo": "No rain"
 
 }

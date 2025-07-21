@@ -23,7 +23,7 @@ export class MachineLearningComponent implements OnInit{
   ){}
 
   ngOnInit(): void {
-    //this.status()
+    this.status()
   }
 
   train() {

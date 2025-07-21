@@ -14,10 +14,9 @@
           <button class="btn btn-primary btn-sm" (click)="status()">{{ 'statusModel' | translate }}</button>
         </div>
         <div class="card-body">
-          <p><strong>{{'modelLoaded' | translate}}:</strong> {{ modelStatus?.model_loaded || '' }}</p>
-          <p><strong>{{'pathToModel' | translate}}:</strong> {{ modelStatus?.model_path || '' }}</p>
-          <p><strong>{{'pathToData' | translate}}:</strong> {{ modelStatus?.data_path || '' }}</p>
-          <p><strong>{{'timestamp' | translate}}:</strong> {{ modelStatus?.timestamp }}</p>
+          <p><strong>{{ 'modelLoaded' | translate }}:</strong>  {{ modelStatus?.model_loaded ? ('yes' | translate) : ('no' | translate) }} </p>
+          <p><strong>{{ 'pathToData' | translate }}:</strong> {{ modelStatus?.data_path || '' }}</p>
+          <p><strong>{{ 'timestamp' | translate }}:</strong> {{ modelStatus?.timestamp }}</p>
         </div>
       </div>
     </div>
@@ -30,9 +29,13 @@
           <button class="btn btn-primary btn-sm" (click)="train()">{{ 'trainModel' | translate }}</button>
         </div>
         <div class="card-body" *ngIf="trainPrediction; else noTrainResult">
-          <p><strong>{{'status' | translate}}:</strong> {{ trainPrediction.status }}</p>
-          <p><strong>{{'' | translate}}:</strong> {{ trainPrediction.accuracy }}%</p>
-          <p><strong>{{'timestamp' | translate}}:</strong> {{ trainPrediction.timestamp }}</p>
+          <p *ngIf="trainPrediction?.status !== null && trainPrediction?.status !== undefined">
+            <strong>
+              {{ trainPrediction.status ? ('statusSuccess' | translate) : ('statusUnsuccessful' | translate) }}
+            </strong>
+          </p>
+          <p><strong>{{ 'accuracy' | translate }}:</strong> {{ trainPrediction.accuracy }}%</p>
+          <p><strong>{{ 'timestamp' | translate }}:</strong> {{ trainPrediction.timestamp }}</p>
         </div>
         <ng-template #noTrainResult>
           <div class="card-body">
@@ -52,9 +55,9 @@
           <button class="btn btn-primary btn-sm" (click)="predict()">{{ 'predictModel' | translate }}</button>
         </div>
         <div class="card-body" *ngIf="rainPrediction; else noPrediction">
-          <p><strong>Napoved:</strong> {{ rainPrediction.prediction ? 'Dež bo' : 'Dežja ne bo' }}</p>
-          <p><strong>Verjetnost:</strong> {{ rainPrediction.probability }}%</p>
-          <p><strong>Čas:</strong> {{ rainPrediction.timestamp }}</p>
+          <p><strong>{{'prediction' | translate }}:</strong> {{ rainPrediction.prediction ? ('rainYes' | translate) : ('rainNo' | translate) }}</p>
+          <p><strong>{{'probability' | translate}}:</strong> {{ rainPrediction.probability }}%</p>
+          <p><strong>{{'timestamp' | translate }}:</strong> {{ rainPrediction.timestamp }}</p>
         </div>
         <ng-template #noPrediction>
           <div class="card-body">
