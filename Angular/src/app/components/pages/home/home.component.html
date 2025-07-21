@@ -1,4 +1,4 @@
-<div class="container mt-5 mb-5">
+<div class="container">
   <div class="row g-3  border border-3 rounded p-3 mx-0">
     <div class="d-flex justify-content-end align-items-start w-100">
       <p class="me-2">
@@ -105,7 +105,7 @@
 
           <div class="col-12 col-md mb-3 mb-md-0">
             <div class="card h-100">
-              <div class="card-body">
+              <div class="card-body pt-0">
                 <app-compass [direction]="weather.wind_direction"></app-compass>
                 <h5 class="card-title">{{ 'windDirection' | translate }}</h5>
                 <p class="card-text">{{ ('wind_direction.' + weather.wind_direction) | translate }}</p>

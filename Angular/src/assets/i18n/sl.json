@@ -93,9 +93,7 @@
   "statusUnsuccessful": "Status: Neuspešno",
 
   "accuracy": "Točnost",
-  "prediction": "Napoved",
-  "rainYes": "Dež bo",
-  "rainNo": "Dežja ne bo"
+  "prediction": "Napoved"
 
 
 }

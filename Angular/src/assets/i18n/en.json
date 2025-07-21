@@ -92,8 +92,7 @@
   "statusSuccess": "Status: Success",
   "statusUnsuccessful": "Status: Unsuccessful",
   "accuracy": "Accuracy",
-  "prediction": "Prediction",
-  "rainYes": "It will rain",
-  "rainNo": "No rain"
+  "prediction": "Prediction"
+
 
 }

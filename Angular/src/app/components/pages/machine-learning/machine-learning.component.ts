@@ -43,6 +43,7 @@ export class MachineLearningComponent implements OnInit{
       next: (res) => {
         this.rainPrediction = res;
         this.rainPrediction.timestamp = this.timestampService.formatDateString(res.timestamp, 0)
+        
       },
       error: (err) => {
         console.error("Napaka pri napovadovanju:", err);       
