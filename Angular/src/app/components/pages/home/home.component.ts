@@ -6,7 +6,7 @@ import { firstValueFrom } from 'rxjs';
 
 import { TimestampService } from '../../../services/timestamp.service';
 import { WindData } from '../../../interfaces/wind-data';
-import { rainPrediction } from '../../../interfaces/rain-prediction';
+import { rainPrediction } from '../../../interfaces/machineLearning/rainPrediction';
 import { FastApiService } from '../../../services/api/fast-api.service';
 
 @Component({

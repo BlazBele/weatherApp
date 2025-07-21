@@ -71,6 +71,22 @@
   "from" : "From",
   "to" : "To",
   "today" : "Today",
-  "show" : "Show"
+  "show" : "Show",
+
+  "ML": "Machine Learning",
+  "trainModelInfo": "Train model",
+  "predictModelInfo": "Predict model",
+  "statusModelInfo": "Status",
+
+  "trainModel": "Train",
+  "predictModel": "Predict",
+  "statusModel": "Refresh Status",
+  "trainInfo": "Click 'Train' to train the model.",
+  "noData": "Click Predict.",
+
+  "modelLoaded": "Is model loaded?",
+  "pathToModel": "Path to model:",
+  "pathToData": "Path to data:",
+  "timestamp": "Last updated:"
 
 }
