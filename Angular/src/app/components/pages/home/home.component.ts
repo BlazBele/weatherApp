@@ -64,7 +64,7 @@ export class HomeComponent implements OnInit {
   async refreshWindData(): Promise<void> {
     try {
       const wind: WindData = await firstValueFrom(this.apiService.getWindData());
-      this.weather.timestamp = this.timestampService.formatDateString(wind.timestamp);
+      this.weather.timestamp = wind.timestamp;
       this.weather.wind_speed = wind.wind_speed;
       this.weather.wind_direction = wind.wind_direction;
 
@@ -77,7 +77,7 @@ export class HomeComponent implements OnInit {
     try {
       const data = await firstValueFrom(this.fastApiService.getRainPrediction());
       this.rainPrediction = data;
-      this.rainPrediction.timestamp = this.timestampService.formatDateString(data.timestamp);
+      this.rainPrediction.timestamp = data.timestamp;
     } catch (error) {
       console.error('Napaka pri osvežitvi napovedi dežja:', error);
     }
