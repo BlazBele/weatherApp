@@ -51,7 +51,7 @@ export class HomeComponent implements OnInit {
     this.supabaseService.getDailyWeatherSummary().subscribe(data => {
       //console.log('Prejeto iz Supabase:', data);
       if (data) {
-        const formattedCreatedAt = this.timestampService.formatDateString(data.created_at);
+        const formattedCreatedAt = data.created_at;
         this.weather = {
           ...data,
           created_at: formattedCreatedAt,
