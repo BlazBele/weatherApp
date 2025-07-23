@@ -29,7 +29,7 @@ getWindData(): Observable<WindData> {
     return of(mockWindData);
   } else {
     console.log("True wind data.")
-    
+  console.log(this.credentials)
   const headers = new HttpHeaders({
     'Authorization': `Basic ${this.credentials}`,
     'ngrok-skip-browser-warning': 'true'
