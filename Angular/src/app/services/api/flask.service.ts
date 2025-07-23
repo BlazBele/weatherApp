@@ -34,18 +34,8 @@ getWindData(): Observable<WindData> {
     'Authorization': `Basic ${this.credentials}`,
     'ngrok-skip-browser-warning': 'true'
   });
-  console.log('Headers to send:', headers);
-  return this.http.get<WindData>(`${this.apiUrl}/wind_data`, { headers }).pipe(
-    catchError(error => {
-      console.error('Napaka pri pridobivanju podatkov o vetru:', error);
-      const fallbackWindData: WindData = {
-        timestamp: '',
-        wind_direction: '',
-        wind_speed: 0
-      };
-      return of(fallbackWindData);
-    })
-  );
+  
+  return this.http.get<WindData>(`${this.apiUrl}/wind_data`, { headers });
 
   }
 }
