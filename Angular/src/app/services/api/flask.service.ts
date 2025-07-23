@@ -1,7 +1,8 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders  } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { environment } from '../../../environments/environment';
 import { Observable, of } from 'rxjs';
+import { catchError } from 'rxjs/operators';
 import { WeatherData } from '../../interfaces/weather-data';
 import { WindData } from '../../interfaces/wind-data';
 
@@ -11,7 +12,8 @@ import { WindData } from '../../interfaces/wind-data';
 })
 export class FlaskService {
   private apiUrl = environment.rpiApiUrl;
-
+  private credentials = btoa(`${environment.ngrokUsername}:${environment.ngrokPassword}`);
+  
   constructor(private http: HttpClient) {}
 
 //PRIDOBI PODATKE O VETRU
@@ -28,9 +30,22 @@ getWindData(): Observable<WindData> {
   } else {
     console.log("True wind data.")
     
-  return this.http.get<WindData>(`${this.apiUrl}/wind_data`, {
-    headers: { 'ngrok-skip-browser-warning': 'true' }
+  const headers = new HttpHeaders({
+    'Authorization': `Basic ${this.credentials}`,
+    'ngrok-skip-browser-warning': 'true'
   });
+  console.log('Headers to send:', headers);
+  return this.http.get<WindData>(`${this.apiUrl}/wind_data`, { headers }).pipe(
+    catchError(error => {
+      console.error('Napaka pri pridobivanju podatkov o vetru:', error);
+      const fallbackWindData: WindData = {
+        timestamp: '',
+        wind_direction: '',
+        wind_speed: 0
+      };
+      return of(fallbackWindData);
+    })
+  );
 
   }
 }
