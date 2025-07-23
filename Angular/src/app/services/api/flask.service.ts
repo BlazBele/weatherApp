@@ -33,7 +33,7 @@ getWindData(): Observable<WindData> {
     'Authorization': `Basic ${credentials}`,
     'ngrok-skip-browser-warning': 'true'
   });
-  
+  console.log('Headers to send:', headers);
   return this.http.get<WindData>(`${this.apiUrl}/wind_data`, { headers });
 
   }
