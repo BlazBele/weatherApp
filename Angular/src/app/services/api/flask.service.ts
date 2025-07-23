@@ -11,7 +11,7 @@ import { WindData } from '../../interfaces/wind-data';
 })
 export class FlaskService {
   private apiUrl = environment.rpiApiUrl;
-  const credentials = btoa(`${environment.ngrokUsername}:${environment.ngrokPassword}`);
+
   constructor(private http: HttpClient) {}
 
 //PRIDOBI PODATKE O VETRU
@@ -28,10 +28,13 @@ getWindData(): Observable<WindData> {
   } else {
     console.log("True wind data.")
     
-  return this.http.get<WindData>(`${this.apiUrl}/wind_data`, {
-    headers: { 'ngrok-skip-browser-warning': 'true' },
-    'Authorization': `Basic ${credentials}`
+  const credentials = btoa(`${environment.ngrokUsername}:${environment.ngrokPassword}`);   
+  const headers = new HttpHeaders({
+    'Authorization': `Basic ${credentials}`,
+    'ngrok-skip-browser-warning': 'true'
   });
+  
+  return this.http.get<WindData>(`${this.apiUrl}/wind_data`, { headers });
 
   }
 }
