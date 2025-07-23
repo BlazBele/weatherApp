@@ -36,11 +36,16 @@ getWindData(): Observable<WindData> {
   });
   console.log('Headers to send:', headers);
   return this.http.get<WindData>(`${this.apiUrl}/wind_data`, { headers }).pipe(
-  catchError(error => {
-    console.error('Napaka pri pridobivanju podatkov o vetru:', error);
-    return of(null); 
-  })
-);
+    catchError(error => {
+      console.error('Napaka pri pridobivanju podatkov o vetru:', error);
+      const fallbackWindData: WindData = {
+        timestamp: '',
+        wind_direction: '',
+        wind_speed: 0
+      };
+      return of(fallbackWindData);
+    })
+  );
 
   }
 }
