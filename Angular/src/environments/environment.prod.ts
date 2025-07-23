@@ -4,6 +4,6 @@ export const environment = {
   rpiApiUrl: 'https://sought-saving-sunfish.ngrok-free.app',
   MLURL: 'https://weatherapp-fast-api.onrender.com',
   ngrokUsername: 'user37',
-  ngrokPassword: 'GesloOdUserja37'
+  ngrokPassword: 'GesloOdUserja37',
   useMock: false 
 };
