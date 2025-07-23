@@ -35,7 +35,7 @@ getWindData(): Observable<WindData> {
     'ngrok-skip-browser-warning': 'true'
   });
   
-  return this.http.get<WindData>(`${this.apiUrl}/wind_data`, { headers });
+  return this.http.get<WindData>(`${this.apiUrl}/wind_data`, { headers, withCredentials: true});
 
   }
 }
