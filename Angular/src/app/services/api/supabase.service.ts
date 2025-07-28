@@ -155,7 +155,6 @@ export class SupabaseService {
             return null;
           }
           return data;
-
         })
     );
   }

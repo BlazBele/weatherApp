@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { WeatherData } from '../../../interfaces/weather-data';
 import { SupabaseService } from '../../../services/api/supabase.service';
 import { FlaskService} from '../../../services/api/flask.service';
@@ -33,13 +33,15 @@ export class HomeComponent implements OnInit {
     rain: false,
     id: 1
   };
+  
 
 
   constructor(
     private supabaseService: SupabaseService,
     private apiService: FlaskService,
     private timestampService: TimestampService,
-    private fastApiService: FastApiService
+    private fastApiService: FastApiService,
+    private cdr: ChangeDetectorRef
   ) {}
 
   ngOnInit(): void {
@@ -56,8 +58,10 @@ export class HomeComponent implements OnInit {
           ...data,
           created_at: formattedCreatedAt,
         };
-
+        //this.cdr.detectChanges(); 
       }
+      console.log(data);
+      
     });
   }
 
@@ -67,6 +71,9 @@ export class HomeComponent implements OnInit {
       this.weather.timestamp = this.timestampService.formatDateString(wind.timestamp);
       this.weather.wind_speed = wind.wind_speed;
       this.weather.wind_direction = wind.wind_direction;
+      if(this.weather.daily_max_wind_speed === undefined || wind.wind_speed > this.weather.daily_max_wind_speed) {
+        this.weather.daily_max_wind_speed = wind.wind_speed;
+      }
 
     } catch (error) {
       console.error('Napaka pri osvežitvi vetra:', error);
@@ -77,6 +84,7 @@ export class HomeComponent implements OnInit {
     try {
       const data = await firstValueFrom(this.fastApiService.getRainPrediction());
       this.rainPrediction = data;
+      this.rainPrediction.probability = data.probability * 100;
       this.rainPrediction.timestamp = this.timestampService.formatDateString(data.timestamp);
     } catch (error) {
       console.error('Napaka pri osvežitvi napovedi dežja:', error);

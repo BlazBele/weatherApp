@@ -65,21 +65,22 @@ loadData() {
   setPage(page: number) {
     if (page < 0 || page >= this.totalPages || this.loading) return;
     this.page = page;
+    window.scrollTo({ top: 0, behavior: 'instant' });
     this.loadData();
   }
 
   visiblePages(): number[] {
-  const maxVisible = 10;
-  const pages: number[] = [];
+    const maxVisible = 10;
+    const pages: number[] = [];
 
-  const start = Math.max(0, Math.min(this.page - Math.floor(maxVisible / 2), this.totalPages - maxVisible));
-  const end = Math.min(this.totalPages, start + maxVisible);
+    const start = Math.max(0, Math.min(this.page - Math.floor(maxVisible / 2), this.totalPages - maxVisible));
+    const end = Math.min(this.totalPages, start + maxVisible);
 
-  for (let i = start; i < end; i++) {
-    pages.push(i);
-  }
+    for (let i = start; i < end; i++) {
+      pages.push(i);
+    }
 
-  return pages;
+    return pages;
 }
 
   pagesArray(): number[] {
@@ -126,6 +127,7 @@ loadData() {
     this.pageSize = +this.pageSize; //Pretvori v number, ERROR!!!
     this.page = 0;
     this.loadData();
+    
   }
 
   toggleSortDirection() {

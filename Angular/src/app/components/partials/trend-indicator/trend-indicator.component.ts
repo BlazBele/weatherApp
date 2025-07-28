@@ -30,7 +30,7 @@ export class TrendIndicatorComponent implements AfterViewInit, OnChanges {
 
   ngAfterViewInit() {
     this.updateCirclePosition();
-    this.cdr.detectChanges(); // ✅ popravi NG0100 napako
+    this.cdr.detectChanges();
   }
 
   ngOnChanges(changes: SimpleChanges) {
@@ -39,16 +39,21 @@ export class TrendIndicatorComponent implements AfterViewInit, OnChanges {
     }
   }
 
-  updateCirclePosition() {
-    const pathEl = this.mainPath.nativeElement;
-    const totalLength = pathEl.getTotalLength();
+updateCirclePosition() {
+  const pathEl = this.mainPath.nativeElement;
+  const totalLength = pathEl.getTotalLength();
 
-    let ratio = (this.currentValue - this.dailyMin) / (this.dailyMax - this.dailyMin);
-    ratio = Math.min(Math.max(ratio, 0), 1);
-
-    const point = pathEl.getPointAtLength(ratio * totalLength);
-
-    this.circleX = point.x;
-    this.circleY = point.y;
+  if (this.dailyMax - this.dailyMin === 0) {
+    return;
   }
+
+  let ratio = (this.currentValue - this.dailyMin) / (this.dailyMax - this.dailyMin);
+  ratio = Math.min(Math.max(ratio, 0), 1);
+
+  const point = pathEl.getPointAtLength(ratio * totalLength);
+
+  this.circleX = point.x;
+  this.circleY = point.y;
+}
+
 }
