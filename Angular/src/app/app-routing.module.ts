@@ -11,6 +11,7 @@ import { TemperatureComponent } from './components/pages/detail/temperature/temp
 import { HumidityComponent } from './components/pages/detail/humidity/humidity.component';
 import { PressureComponent } from './components/pages/detail/pressure/pressure.component';
 import { WindSpeedComponent } from './components/pages/detail/wind-speed/wind-speed.component';
+import { HlsVideoComponent } from './components/hls-video/hls-video.component';
 
 const routes: Routes = [
   { path: '', component: HomeComponent },
@@ -24,6 +25,7 @@ const routes: Routes = [
   { path: 'humidity', component: HumidityComponent},
   { path: 'pressure', component: PressureComponent},
   { path: 'windSpeed', component: WindSpeedComponent},
+  { path: 'video', component: HlsVideoComponent},
 
 
 

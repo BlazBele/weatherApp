@@ -24,6 +24,7 @@ import { BaseChartDirective, provideCharts, withDefaultRegisterables } from 'ng2
 import { HumidityComponent } from './components/pages/detail/humidity/humidity.component';
 import { PressureComponent } from './components/pages/detail/pressure/pressure.component';
 import { WindSpeedComponent } from './components/pages/detail/wind-speed/wind-speed.component';
+import { HlsVideoComponent } from './components/hls-video/hls-video.component';
 
 
 
@@ -49,7 +50,8 @@ export function HttpLoaderFactory(http: HttpClient){
     TemperatureComponent,
     HumidityComponent,
     PressureComponent,
-    WindSpeedComponent
+    WindSpeedComponent,
+    HlsVideoComponent
   ],
   imports: [
     BrowserModule,
