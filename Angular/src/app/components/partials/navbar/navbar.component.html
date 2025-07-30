@@ -1,6 +1,7 @@
 <nav class="navbar navbar-expand-lg bg-body-tertiary fixed-top">
   <div class="container-fluid">
     <a href="/" class="nav-link fw-semibold">Postaja Straža</a>
+
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
             data-bs-target="#navbarSupportedContent"
             aria-controls="navbarSupportedContent"
@@ -23,6 +24,9 @@
       <!--Desna stran: dark mode + jezik-->
       <div class="d-flex align-items-center ms-auto gap-3">
         <ul class="navbar-nav d-flex flex-row align-items-center">
+          <li class="nav-item">
+            <a routerLink="/video" class="bi bi-camera pe-3 fs-4 text-danger"></a>
+          </li>
           <li class="nav-item" *ngIf="!isLoggedIn">
             <button type="button" class="btn btn-primary no-padding" routerLink="/login" (click)="logout()">{{'login' | translate}}</button>
           </li>
