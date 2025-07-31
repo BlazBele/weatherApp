@@ -20,13 +20,12 @@
           <a routerLink="/admin" class="nav-link no-padding" style="cursor: pointer;">{{'admin' | translate}}</a>
         </li>
       </ul>
-      
+      <div class="mb-2 mb-lg-0">
+        <a routerLink="/video" class="nav-link bi bi-camera pe-3 fs-4 text-danger" aria-label="Video kamera"></a>
+      </div>
       <!--Desna stran: dark mode + jezik-->
       <div class="d-flex align-items-center ms-auto gap-3">
         <ul class="navbar-nav d-flex flex-row align-items-center">
-          <li class="nav-item">
-            <a routerLink="/video" class="nav-link bi bi-camera pe-3 fs-4 text-danger" aria-label="Video kamera"></a>
-          </li>
           <li class="nav-item" *ngIf="!isLoggedIn">
             <button type="button" class="btn btn-primary no-padding" routerLink="/login" (click)="logout()">{{'login' | translate}}</button>
           </li>
