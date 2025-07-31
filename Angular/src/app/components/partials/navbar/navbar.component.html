@@ -14,10 +14,10 @@
       <!--Leva stran: navigacija -->
       <ul class="navbar-nav">
         <li class="nav-item">
-          <a routerLink="/" class="nav-link active" aria-current="page"></a>
+          <a routerLink="/" class="nav-link active" (click)="closeMenu()" aria-current="page"></a>
         </li>
         <li class="nav-item" *ngIf="isLoggedIn">
-          <a routerLink="/admin" class="nav-link no-padding" style="cursor: pointer;">{{'admin' | translate}}</a>
+          <a routerLink="/admin" class="nav-link no-padding" (click)="closeMenu()" style="cursor: pointer;">{{'admin' | translate}}</a>
         </li>
       </ul>
 
@@ -25,7 +25,7 @@
       <!--Desna stran: dark mode + jezik-->
       <div class="d-flex align-items-center ms-auto gap-3">
         <div class="mb-2 mb-lg-0">
-          <a routerLink="/video" class="bi bi-camera fs-4 text-danger" aria-label="Video kamera"></a>
+          <a routerLink="/video" class="bi bi-camera fs-4 text-danger" (click)="closeMenu()" aria-label="Video kamera"></a>
         </div>
         <ul class="navbar-nav d-flex flex-row align-items-center">
           <li class="nav-item" *ngIf="!isLoggedIn">

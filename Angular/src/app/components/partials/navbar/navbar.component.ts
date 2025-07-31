@@ -12,6 +12,7 @@ import { AuthService } from '../../../services/auth.service';
 })
 export class NavbarComponent {
   isDarkMode = false;
+  isMenuOpen = false;
 
   selectedLanguage: { name: string, shortName: string, flag: string } = { 
     name: 'Slovenščina', 
@@ -57,7 +58,16 @@ export class NavbarComponent {
   }
 
   async logout() {
+    this.closeMenu();
     await this.authService.logout();
     this.router.navigate(['/login']);
+  }
+
+  closeMenu() {
+    this.isMenuOpen = false;
+  }
+
+  toggleMenu() {
+    this.isMenuOpen = !this.isMenuOpen;
   }
 }
