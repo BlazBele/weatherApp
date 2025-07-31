@@ -46,7 +46,7 @@ export class HomeComponent implements OnInit {
 
   ngOnInit(): void {
     this.loadWeatherFromSupabase();
-    this.refreshRainPrediction();
+    //this.refreshRainPrediction();
   }
 
   loadWeatherFromSupabase(): void {

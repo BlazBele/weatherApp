@@ -5,6 +5,6 @@ export const environment = {
   MLURL: 'https://weatherapp-fast-api.onrender.com',
   ngrokUsername: 'user37',
   ngrokPassword: 'GesloOdUserja37',
-  hlsStreamUrl: 'https://192.168.1.115:8000/stream.m3u8',
+  hlsStreamUrl: 'https://livevideoweatherstation.duckdns.org:5001/stream.m3u8',
   useMock: true 
 };
