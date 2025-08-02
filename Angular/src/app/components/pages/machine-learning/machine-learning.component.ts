@@ -30,6 +30,7 @@ export class MachineLearningComponent implements OnInit{
     this.fastApi.trainModel().subscribe({
       next: (res) => {
         this.trainPrediction = res;
+        this.trainPrediction.accuracy = this.trainPrediction.accuracy * 100;
         this.trainPrediction.timestamp = this.timestampService.formatDateString(res.timestamp, 0)
       },
       error: (err) => {

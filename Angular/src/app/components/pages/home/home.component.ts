@@ -71,6 +71,8 @@ export class HomeComponent implements OnInit {
       this.weather.timestamp = this.timestampService.formatDateString(wind.timestamp);
       this.weather.wind_speed = wind.wind_speed;
       this.weather.wind_direction = wind.wind_direction;
+      console.log(this.weather);
+      
       if(this.weather.daily_max_wind_speed === undefined || wind.wind_speed > this.weather.daily_max_wind_speed) {
         this.weather.daily_max_wind_speed = wind.wind_speed;
       }

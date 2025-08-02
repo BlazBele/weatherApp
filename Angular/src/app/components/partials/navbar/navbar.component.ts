@@ -64,10 +64,14 @@ export class NavbarComponent {
   }
 
   closeMenu() {
+    const toggler = document.querySelector('.navbar-toggler') as HTMLElement;
+    const navbarCollapse = document.getElementById('navbarSupportedContent');
+
+    if (navbarCollapse?.classList.contains('show') && toggler) {
+      toggler.click();
+    }
+
     this.isMenuOpen = false;
   }
 
-  toggleMenu() {
-    this.isMenuOpen = !this.isMenuOpen;
-  }
 }
