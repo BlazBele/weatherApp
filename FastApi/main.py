@@ -214,7 +214,7 @@ def train_xgboost_model():
         return {
             "status": 1,
             "accuracy": round(float(acc),2),
-            "message": f"Model uspešno učeno in shranjeno v {MODEL_PATH}. Točnost: {acc:.4f}",
+            "message": f"Uspešno in shranjeno v {MODEL_PATH}. Točnost: {acc:.4f}",
             "timestamp": datetime.now(slovenia_tz)
         }
     except Exception as e:
