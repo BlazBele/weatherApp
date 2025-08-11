@@ -2,7 +2,6 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { environment } from '../../../environments/environment';
 import { Observable, of } from 'rxjs';
-import { WeatherData } from '../../interfaces/weather-data';
 import { WindData } from '../../interfaces/wind-data';
 
 
