@@ -2,14 +2,17 @@
 
 Aplikacija omogoča **prikaz trenutnih vremenskih podatkov**, **pregled zgodovine meritev**, ter **napoved možnosti dežja** na osnovi modela strojnega učenja.  
 
-Sestavljena je iz:
+## Tehnična arhitektura
 
-**Backend: FastAPI (Python)** – glavni API strežnik za obdelavo in posredovanje vremenskih podatkov.
+- **Backend:** FastAPI (Python)  
+  Glavni API strežnik za obdelavo in posredovanje vremenskih podatkov.
 
-**Frontend: Angular (TypeScript)** – uporabniški vmesnik za prikaz podatkov in interakcijo.
+- **Frontend:** Angular (TypeScript)  
+  Uporabniški vmesnik za prikaz podatkov in interakcijo.
 
-**Raspberry PI (Senzorji): Flask (Python)** na Raspberry Pi – zajem in posredovanje podatkov iz senzorjev v glavni sistem. (Ni prisoten v temu repozitoriju.)
-
+- **Raspberry Pi (senzorji):** Flask (Python)  
+  Zajem in posredovanje podatkov iz senzorjev v glavni sistem.  
+  *(Ni prisoten v tem repozitoriju.)*
 ---
 
 ## 📖 Kaj aplikacija omogoča
@@ -48,3 +51,4 @@ Sestavljena je iz:
 2. Zagon aplikacije v produkcijskem načinu:
     ```bash
     ng serve --configuration=production
+
