@@ -1,6 +1,7 @@
 # 🌦 Weather Prediction & Visualization App
 
 Aplikacija omogoča **prikaz trenutnih vremenskih podatkov**, **pregled zgodovine meritev**, ter **napoved možnosti dežja** na osnovi modela strojnega učenja.  
+
 Sestavljena je iz:
 **Backend: FastAPI (Python)** – glavni API strežnik za obdelavo in posredovanje vremenskih podatkov.
 
@@ -46,5 +47,6 @@ Sestavljena je iz:
 2. Zagon aplikacije v produkcijskem načinu:
     ```bash
     ng serve --configuration=production
+
 
 
