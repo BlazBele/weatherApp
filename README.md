@@ -1,7 +1,12 @@
 # 🌦 Weather Prediction & Visualization App
 
 Aplikacija omogoča **prikaz trenutnih vremenskih podatkov**, **pregled zgodovine meritev**, ter **napoved možnosti dežja** na osnovi modela strojnega učenja.  
-Sestavljena je iz **FastAPI backend-a** (Python) in **Angular frontend-a** (TypeScript).
+Sestavljena je iz:
+**Backend: FastAPI (Python)** – glavni API strežnik za obdelavo in posredovanje vremenskih podatkov.
+
+**Frontend: Angular (TypeScript)** – uporabniški vmesnik za prikaz podatkov in interakcijo.
+
+**Lokalni senzorni servis: Flask (Python)** na Raspberry Pi – zajem in posredovanje podatkov iz senzorjev v glavni sistem. (Ni prisoten v temu repozitoriju.)
 
 ---
 
@@ -41,4 +46,5 @@ Sestavljena je iz **FastAPI backend-a** (Python) in **Angular frontend-a** (Type
 2. Zagon aplikacije v produkcijskem načinu:
     ```bash
     ng serve --configuration=production
+
 
