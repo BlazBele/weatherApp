@@ -48,7 +48,3 @@ Sestavljena je iz:
 2. Zagon aplikacije v produkcijskem načinu:
     ```bash
     ng serve --configuration=production
-
-
-
-
