@@ -36,5 +36,9 @@ Sestavljena je iz **FastAPI backend-a** (Python) in **Angular frontend-a** (Type
 
 ### 1. Backend (FastAPI)
 1. Namesti Python odvisnosti:
-   ```bash
-   pip install -r requirements.txt
+    ```bash
+    npm install
+2. Zagon aplikacije v produkcijskem načinu:
+    ```bash
+    ng serve --configuration=production
+
