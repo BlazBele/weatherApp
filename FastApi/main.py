@@ -123,8 +123,7 @@ def prepare_data(df, hours_ahead=3):
         df = df.sort_values('created_at')
         
         df['target'] = df['rain'].shift(-hours_ahead * 3)
-        
-        # Dinamične značilke
+
         df['temperature_change_20min'] = df['temperature'].diff()
         df['pressure_change_20min'] = df['pressure0'].diff()
         df['temperature_change_1h'] = df['temperature'].diff(3)
@@ -132,15 +131,19 @@ def prepare_data(df, hours_ahead=3):
         df['rained_last_1h'] = df['rain'].rolling(3).sum().shift(1)
         df['temperature_rolling_3h'] = df['temperature'].rolling(9).mean()
         df['pressure_rolling_3h'] = df['pressure0'].rolling(9).mean()
-        df['temp_trend'] = df['temperature'].diff().rolling(3).mean()
-        df['pressure_trend'] = df['pressure0'].diff().rolling(3).mean()
-        
+        df['humidity_change_20min'] = df['humidity'].diff()
+        df['humidity_change_1h'] = df['humidity'].diff(3)
+        df['humidity_rolling_3h'] = df['humidity'].rolling(9).mean()
+        df['wind_speed_rolling_3h'] = df['wind_speed'].rolling(9).mean()
+
         features = [
-            'temperature', 'humidity', 'pressure0', 'wind_speed',
-            'temperature_change_20min', 'pressure_change_20min',
+            'temperature', 'humidity', 'pressure0', 'rain',
+            'temperature_change_20min',
             'temperature_change_1h', 'pressure_change_1h',
             'rained_last_1h', 'temperature_rolling_3h',
-            'pressure_rolling_3h', 'temp_trend', 'pressure_trend'
+            'pressure_rolling_3h',
+            'humidity_change_20min', 'humidity_change_1h',
+            'humidity_rolling_3h', 'wind_speed_rolling_3h'
         ]
         
         df_clean = df.dropna(subset=features + ['target'])
@@ -177,48 +180,72 @@ def prepare_prediction_data(last_9_records):
         prev_record = last_9_records.iloc[-2]
         hour_ago_record = last_9_records.iloc[-4] if len(last_9_records) >= 4 else prev_record
 
+        rained_last_1h_val = last_9_records['rain'].iloc[-4:-1].sum()
+        
         return {
             'temperature': last_record['temperature'],
             'humidity': last_record['humidity'],
             'pressure0': last_record['pressure0'],
+            'rain': last_record['rain'],
             'wind_speed': last_record['wind_speed'],
             'temperature_change_20min': last_record['temperature'] - prev_record['temperature'],
             'pressure_change_20min': last_record['pressure0'] - prev_record['pressure0'],
             'temperature_change_1h': last_record['temperature'] - hour_ago_record['temperature'],
             'pressure_change_1h': last_record['pressure0'] - hour_ago_record['pressure0'],
-            'rained_last_1h': int(last_9_records['rain'].iloc[-4:-1].sum() > 0),
+            'rained_last_1h': int(rained_last_1h_val > 0),
             'temperature_rolling_3h': last_9_records['temperature'].mean(),
             'pressure_rolling_3h': last_9_records['pressure0'].mean(),
-            'temp_trend': last_9_records['temperature'].diff().mean(),
-            'pressure_trend': last_9_records['pressure0'].diff().mean()
+            'humidity_change_20min': last_record['humidity'] - prev_record['humidity'],
+            'humidity_change_1h': last_record['humidity'] - hour_ago_record['humidity'],
+            'humidity_rolling_3h': last_9_records['humidity'].mean(),
+            'wind_speed_rolling_3h': last_9_records['wind_speed'].mean(),
         }
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Napaka pri pripravi podatkov za napoved: {str(e)}")
 
 # --- Model Operations ---
 def train_xgboost_model():
-    """Train the XGBoost model and save it"""
+    """Train the XGBoost model and save it with updated train/val/test split and parameters"""
     try:
         df = fetch_data()
         X, y = prepare_data(df, hours_ahead=3)
-        
-        X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
-        model = XGBClassifier(eval_metric='logloss')
-        model.fit(X_train, y_train)
-        
+        X_train_val, X_test, y_train_val, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+        X_train, X_val, y_train, y_val = train_test_split(X_train_val, y_train_val, test_size=0.2, random_state=42)
+
+        #Nastavitve modela
+        model = XGBClassifier(
+            use_label_encoder=False,
+            eval_metric='logloss',
+            random_state=42,
+            max_depth=3,
+            reg_alpha=1,
+            reg_lambda=1,
+            early_stopping_rounds=10
+        )
+
+        #Treniranje z eval setom
+        model.fit(
+            X_train, y_train,
+            eval_set=[(X_val, y_val)],
+            verbose=True
+        )
+
+        #Napoved na testnih podatkih
         y_pred = model.predict(X_test)
         acc = accuracy_score(y_test, y_pred)
-        
+
         save_model(model)
-        
+
         return {
             "status": 1,
-            "accuracy": round(float(acc),2),
+            "accuracy": round(float(acc), 4),
             "message": f"Uspešno in shranjeno v {MODEL_PATH}. Točnost: {acc:.4f}",
             "timestamp": datetime.now(slovenia_tz)
         }
+
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Napaka pri učenju modela: {str(e)}")
+
 
 def make_prediction(input_data: dict):
     """Make a prediction using the trained model"""
@@ -228,11 +255,13 @@ def make_prediction(input_data: dict):
             raise HTTPException(status_code=404, detail="Model ni bil najden. Najprej izvedite usposabljanje.")
         
         features = [
-            'temperature', 'humidity', 'pressure0', 'wind_speed',
-            'temperature_change_20min', 'pressure_change_20min',
+            'temperature', 'humidity', 'pressure0', 'rain',
+            'temperature_change_20min',
             'temperature_change_1h', 'pressure_change_1h',
             'rained_last_1h', 'temperature_rolling_3h',
-            'pressure_rolling_3h', 'temp_trend', 'pressure_trend'
+            'pressure_rolling_3h',
+            'humidity_change_20min', 'humidity_change_1h',
+            'humidity_rolling_3h', 'wind_speed_rolling_3h'
         ]
         
         input_df = pd.DataFrame([input_data])
@@ -269,7 +298,6 @@ async def predict_from_latest():
         return make_prediction(prediction_data)
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
-
 
 
 @app.get("/model/status")
