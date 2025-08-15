@@ -26,10 +26,10 @@ async login() {
     if (result.role === 1) {
       this.router.navigate(['/admin']);
     } else {
-      this.errorMessage = this.translate.instant('LOGIN.accessDenied');
+      this.errorMessage = this.translate.instant('accessDenied');
     }
   } catch (err) {
-    this.errorMessage = this.translate.instant('LOGIN.invalidCredentials');
+    this.errorMessage = this.translate.instant('invalidCredentials');
   }
 }
 
