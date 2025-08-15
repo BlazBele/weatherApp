@@ -1,5 +1,5 @@
 <div class="container">
-  <h3>{{ 'admin' | translate }}</h3>
+  <h3>{{ 'dataShow' | translate }}</h3>
 
   <label for="sortColumn" class="mb-0 me-2">{{ 'sort' | translate}}</label>
   <select id="sortColumn" class="form-select d-inline-block w-auto" [(ngModel)]="sortColumn" (change)="loadData()">
@@ -85,7 +85,7 @@
     <div class="modal-dialog modal-md" role="document">
       <div class="modal-content">
         <div class="modal-header">
-          <h5 class="modal-title">{{ 'admin' | translate }}</h5>
+          <h5 class="modal-title">{{ 'editData' | translate }}</h5>
           <button type="button" class="close btn-close ms-auto" (click)="cancelEdit()"></button>
         </div>
         <div class="modal-body d-flex justify-content-center">

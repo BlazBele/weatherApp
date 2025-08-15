@@ -93,7 +93,9 @@
   "statusUnsuccessful": "Status: Neuspešno",
 
   "accuracy": "Točnost",
-  "prediction": "Napoved"
+  "prediction": "Napoved",
+  "dataShow": "Prikaz vremenskih podatkov",
+  "editData": "Uredi vnos"
 
 
 }
