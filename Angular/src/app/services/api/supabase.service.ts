@@ -145,7 +145,7 @@ export class SupabaseService {
   }
     return from(
       this.supabase
-        .from('latestandpreviousweather')
+        .from('latestAndPreviousWeather')
         .select('*')
         .limit(1)
         .single()
