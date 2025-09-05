@@ -1,4 +1,4 @@
-# 🌦 Weather Prediction & Visualization App
+#  Weather Prediction & Visualization App
 
 Aplikacija omogoča **prikaz trenutnih vremenskih podatkov**, **pregled zgodovine meritev**, ter **napoved možnosti dežja** na osnovi modela strojnega učenja.  
 
@@ -56,6 +56,7 @@ Aplikacija omogoča **prikaz trenutnih vremenskih podatkov**, **pregled zgodovin
 2. Zagon aplikacije v produkcijskem načinu:
     ```bash
     ng serve --configuration=production
+
 
 
 
