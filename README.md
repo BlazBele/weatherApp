@@ -4,16 +4,21 @@ Aplikacija omogoča **prikaz trenutnih vremenskih podatkov**, **pregled zgodovin
 
 ## Tehnična arhitektura
 
-- **Backend:** FastAPI (Python)  
-  Glavni API strežnik za obdelavo in posredovanje vremenskih podatkov.
+- **Frontend:** [Angular](https://angular.io/) (TypeScript)  
+  Uporabniški vmesnik za prikaz podatkov ter interakcijo z uporabnikom.  
+  Komunicira tako s Flask kot s FastAPI storitvami.
 
-- **Frontend:** Angular (TypeScript)  
-  Uporabniški vmesnik za prikaz podatkov in interakcijo.
+- **IoT Backend (Raspberry Pi):** [Flask](https://flask.palletsprojects.com/) (Python)  
+  Modul na Raspberry Pi, ki skrbi za zajem podatkov iz senzorjev in ponuja API endpointe za dostop do teh podatkov.  
+  Podatke posreduje neposredno Angular aplikaciji.
 
-- **Raspberry Pi (senzorji):** Flask (Python)  
-  Zajem in posredovanje podatkov iz senzorjev v glavni sistem.  
-  *(Ni prisoten v tem repozitoriju.)*
----
+- **ML Backend:** [FastAPI](https://fastapi.tiangolo.com/) (Python)  
+  Strežnik za obdelavo podatkov in izvajanje modelov strojnega učenja.  
+  Angular aplikacija se nanj povezuje za analitične funkcionalnosti.
+
+- **Podatkovna baza:** [Supabase](https://supabase.com/)  
+  Shramba podatkov in avtentikacija uporabnikov.
+
 
 ## 📖 Kaj aplikacija omogoča
 
@@ -51,4 +56,5 @@ Aplikacija omogoča **prikaz trenutnih vremenskih podatkov**, **pregled zgodovin
 2. Zagon aplikacije v produkcijskem načinu:
     ```bash
     ng serve --configuration=production
+
 
