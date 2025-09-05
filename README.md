@@ -1,4 +1,4 @@
-#  <img width="14" height="14" alt="image" src="https://github.com/user-attachments/assets/17871390-bbca-4e8a-93a8-6d5dd8f30b2c" /> Weather Prediction & Visualization App
+#  <img width="25" height="25" alt="image" src="https://github.com/user-attachments/assets/17871390-bbca-4e8a-93a8-6d5dd8f30b2c" /> Weather Prediction & Visualization App
 
 Aplikacija omogoča **prikaz trenutnih vremenskih podatkov**, **pregled zgodovine meritev**, ter **napoved možnosti dežja** na osnovi modela strojnega učenja.  
 
@@ -56,6 +56,7 @@ Aplikacija omogoča **prikaz trenutnih vremenskih podatkov**, **pregled zgodovin
 2. Zagon aplikacije v produkcijskem načinu:
     ```bash
     ng serve --configuration=production
+
 
 
 
