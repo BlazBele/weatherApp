@@ -1,4 +1,4 @@
-#  <img width="30" height="30" alt="image" src="https://github.com/user-attachments/assets/17871390-bbca-4e8a-93a8-6d5dd8f30b2c" /> Weather Prediction & Visualization App
+#  <img width="30" height="30" alt="image" src="https://github.com/user-attachments/assets/17871390-bbca-4e8a-93a8-6d5dd8f30b2c" />   Weather Prediction & Visualization App
 
 Aplikacija omogoča **prikaz trenutnih vremenskih podatkov**, **pregled zgodovine meritev**, ter **napoved možnosti dežja** na osnovi modela strojnega učenja.  
 
@@ -20,7 +20,7 @@ Aplikacija omogoča **prikaz trenutnih vremenskih podatkov**, **pregled zgodovin
   Shramba podatkov in avtentikacija uporabnikov.
 
 
-## <img width="30" height="30" alt="image" src="https://github.com/user-attachments/assets/eadc9e68-d6e0-4806-935b-7ad3e8cd8a40" /> Kaj aplikacija omogoča
+## <img width="30" height="30" alt="image" src="https://github.com/user-attachments/assets/eadc9e68-d6e0-4806-935b-7ad3e8cd8a40" />   Kaj aplikacija omogoča
 
 - **Trenutni vremenski podatki**:
   - Temperatura, relativna vlažnost, zračni tlak, hitrost in smer vetra
@@ -47,7 +47,7 @@ Aplikacija omogoča **prikaz trenutnih vremenskih podatkov**, **pregled zgodovin
 
 ---
 
-## <img width="30" height="30" alt="image" src="https://github.com/user-attachments/assets/8a286662-22ec-4ef2-bfcf-b44d14402455" /> Zagon aplikacije
+## <img width="30" height="30" alt="image" src="https://github.com/user-attachments/assets/8a286662-22ec-4ef2-bfcf-b44d14402455" />   Zagon aplikacije
 
 ### 1. Backend (FastAPI)
 1. Namesti Python odvisnosti:
@@ -56,6 +56,7 @@ Aplikacija omogoča **prikaz trenutnih vremenskih podatkov**, **pregled zgodovin
 2. Zagon aplikacije v produkcijskem načinu:
     ```bash
     ng serve --configuration=production
+
 
 
 
