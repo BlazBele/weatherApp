@@ -8,7 +8,7 @@ Aplikacija omogoča **prikaz trenutnih vremenskih podatkov**, **pregled zgodovin
   Uporabniški vmesnik za prikaz podatkov ter interakcijo z uporabnikom.  
   Komunicira tako s Flask kot s FastAPI storitvami.
 
-- **IoT Backend (Raspberry Pi):** [Flask](https://flask.palletsprojects.com/) (Python)  
+- **IoT Backend (Raspberry Pi):** [Flask](https://flask.palletsprojects.com/) (Python)  -Ni prisoten v repozitoriju. 
   Modul na Raspberry Pi, ki skrbi za zajem podatkov iz senzorjev in ponuja API endpointe za dostop do teh podatkov.  
   Podatke posreduje neposredno Angular aplikaciji.
 
@@ -56,5 +56,6 @@ Aplikacija omogoča **prikaz trenutnih vremenskih podatkov**, **pregled zgodovin
 2. Zagon aplikacije v produkcijskem načinu:
     ```bash
     ng serve --configuration=production
+
 
 
