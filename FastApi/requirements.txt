@@ -6,3 +6,4 @@ xgboost
 scikit-learn
 python-dotenv
 supabase
+matplotlib
