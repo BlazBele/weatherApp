@@ -13,14 +13,15 @@ import matplotlib.pyplot as plt
 from datetime import datetime
 import pytz
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.responses import FileResponse
 
 
 slovenia_tz = pytz.timezone("Europe/Ljubljana")
-# Initialize FastAPI app
+#Initialize FastAPI app
 app = FastAPI(title="Rain Prediction API", 
               description="API for predicting rain based on weather data")
 
-# Configure CORS
+#Configure CORS
 app.add_middleware(
     CORSMiddleware,
     allow_origins=[
@@ -33,7 +34,7 @@ app.add_middleware(
 )
 
 
-# Global configuration
+#Global configuration
 MODEL_PATH = "rain_prediction_model.pkl"
 DATA_PATH = "vremenski_podatki.csv"
 
@@ -50,7 +51,7 @@ class TrainingResult(BaseModel):
     message: str
     timestamp: datetime
 
-# --- Helper Functions ---
+#--- Helper Functions ---
 def load_env_vars():
     load_dotenv()
     SUPABASE_URL = os.getenv("SUPABASE_URL")
@@ -75,7 +76,7 @@ def save_model(model):
     joblib.dump(model, MODEL_PATH)
     print(f"Model shranjen v {MODEL_PATH}")
 
-# --- Data Processing ---
+#--- Data Processing ---
 def fetch_data(start_id=788):
     try:
         SUPABASE_URL, SUPABASE_KEY = load_env_vars()
@@ -203,7 +204,7 @@ def prepare_prediction_data(last_9_records):
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Napaka pri pripravi podatkov za napoved: {str(e)}")
 
-# --- Model Operations ---
+#--- Model Operations ---
 def train_xgboost_model():
     """Train the XGBoost model and save it with updated train/val/test split and parameters"""
     try:
@@ -279,7 +280,7 @@ def make_prediction(input_data: dict):
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Napaka pri napovedovanju: {str(e)}")
 
-# --- API Endpoints ---
+#--- API Endpoints ---
 @app.get("/train", response_model=TrainingResult)
 async def train_model():
     """
@@ -319,22 +320,18 @@ async def download_model():
         raise HTTPException(status_code=404, detail=f"Datoteka '{filename}' ni bila najdena.")
       
 @app.get("/get_tree")
-async def get_tree_png(tree_index: int = 0):
+async def get_tree_simple(tree_index: int = 0):
     model = load_model()
     if model is None:
-        raise HTTPException(status_code=404, detail="Model ni bil najden. Najprej izvedite usposabljanje.")
-    try:
-        filename = export_tree_to_png(model, tree_index=tree_index, filename="xgb_tree.png")
-        return FileResponse(path=filename, filename="xgb_tree.png", media_type='image/png')
-    except Exception as e:
-        raise HTTPException(status_code=500, detail=f"Napaka pri izvozu drevesa: {str(e)}")
+        raise HTTPException(status_code=404, detail="Model ni bil najden.")
+    
+    filename = export_tree_to_png(model, tree_index=tree_index)
+    return FileResponse(path=filename, filename="xgb_tree.png", media_type='image/png')
+
 
 def export_tree_to_png(model, tree_index=0, filename="xgb_tree.png"):
-    if model is None:
-        raise ValueError("Model ni naložen.")
-    
-    plt.figure(figsize=(20,10))
-    plot_tree(model, num_trees=tree_index, rankdir='LR')  #LR = horizontalno drevo
+    plt.figure(figsize=(20, 10))
+    plot_tree(model, num_trees=tree_index, rankdir='LR')  #horizontalno drevo
     plt.savefig(filename)
     plt.close()
     return filename
