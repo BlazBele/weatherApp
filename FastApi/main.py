@@ -13,7 +13,7 @@ import matplotlib.pyplot as plt
 from datetime import datetime
 import pytz
 from fastapi.middleware.cors import CORSMiddleware
-from fastapi.responses import FileResponse
+
 
 
 slovenia_tz = pytz.timezone("Europe/Ljubljana")
