@@ -3,25 +3,24 @@ import pandas as pd
 import joblib
 from supabase import create_client
 from dotenv import load_dotenv
-from xgboost import XGBClassifier, plot_tree
+from xgboost import XGBClassifier
 from sklearn.model_selection import train_test_split
 from sklearn.metrics import accuracy_score
 from fastapi import FastAPI, HTTPException
 from pydantic import BaseModel
 from fastapi.responses import FileResponse
-import matplotlib.pyplot as plt
+
 from datetime import datetime
 import pytz
 from fastapi.middleware.cors import CORSMiddleware
 
 
-
 slovenia_tz = pytz.timezone("Europe/Ljubljana")
-#Initialize FastAPI app
+# Initialize FastAPI app
 app = FastAPI(title="Rain Prediction API", 
               description="API for predicting rain based on weather data")
 
-#Configure CORS
+# Configure CORS
 app.add_middleware(
     CORSMiddleware,
     allow_origins=[
@@ -34,7 +33,7 @@ app.add_middleware(
 )
 
 
-#Global configuration
+# Global configuration
 MODEL_PATH = "rain_prediction_model.pkl"
 DATA_PATH = "vremenski_podatki.csv"
 
@@ -51,7 +50,7 @@ class TrainingResult(BaseModel):
     message: str
     timestamp: datetime
 
-#--- Helper Functions ---
+# --- Helper Functions ---
 def load_env_vars():
     load_dotenv()
     SUPABASE_URL = os.getenv("SUPABASE_URL")
@@ -67,19 +66,16 @@ def save_data(df, filename=DATA_PATH):
     df.to_csv(filename, index=False)
     print(f"Podatki shranjeni v {filename}")
 
-
 def load_model():
     if os.path.exists(MODEL_PATH):
-        model = XGBClassifier()
-        model.load_model(MODEL_PATH)
-        return model
+        return joblib.load(MODEL_PATH)
     return None
 
 def save_model(model):
-    model.save_model(MODEL_PATH)    
+    joblib.dump(model, MODEL_PATH)
     print(f"Model shranjen v {MODEL_PATH}")
 
-#--- Data Processing ---
+# --- Data Processing ---
 def fetch_data(start_id=788):
     try:
         SUPABASE_URL, SUPABASE_KEY = load_env_vars()
@@ -207,7 +203,7 @@ def prepare_prediction_data(last_9_records):
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Napaka pri pripravi podatkov za napoved: {str(e)}")
 
-#--- Model Operations ---
+# --- Model Operations ---
 def train_xgboost_model():
     """Train the XGBoost model and save it with updated train/val/test split and parameters"""
     try:
@@ -283,7 +279,7 @@ def make_prediction(input_data: dict):
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Napaka pri napovedovanju: {str(e)}")
 
-#--- API Endpoints ---
+# --- API Endpoints ---
 @app.get("/train", response_model=TrainingResult)
 async def train_model():
     """
@@ -321,37 +317,6 @@ async def download_model():
         return FileResponse(path=filename, filename="download.pkl", media_type='application/octet-stream')
     except Exception:
         raise HTTPException(status_code=404, detail=f"Datoteka '{filename}' ni bila najdena.")
-
-
-def export_tree_to_png(model, tree_index=0, filename="/tmp/xgb_tree.png"):
-    import matplotlib
-    matplotlib.use("Agg")
-    import matplotlib.pyplot as plt
-
-    booster = model.get_booster()
-    n_trees = len(booster.get_dump())
-
-    if tree_index < 0 or tree_index >= n_trees:
-        raise HTTPException(
-            status_code=400,
-            detail=f"tree_index mora biti med 0 in {n_trees - 1}"
-        )
-
-    plt.figure(figsize=(20, 10))
-    plot_tree(model, num_trees=tree_index, rankdir="LR")
-    plt.savefig(filename)
-    plt.close()
-    return filename
-
-
-
-@app.get("/get_tree")
-async def get_tree_simple(tree_index: int = 0):
-    model = load_model()
-    if model is None:
-        raise HTTPException(status_code=404, detail="Model ni bil najden.")
-    filename = export_tree_to_png(model, tree_index=tree_index)
-    return FileResponse(path=filename, filename="xgb_tree.png", media_type="image/png")
 
 
 if __name__ == "__main__":
