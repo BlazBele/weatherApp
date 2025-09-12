@@ -326,14 +326,19 @@ def export_tree_to_png(model, tree_index=0, filename="/tmp/xgb_tree.png"):
     import matplotlib.pyplot as plt
     from xgboost import plot_tree
 
-    if tree_index < 0 or tree_index >= model.n_estimators:
-        raise HTTPException(status_code=400, detail=f"tree_index mora biti med 0 in {model.n_estimators - 1}")
-    
-    plt.figure(figsize=(20, 10))
-    plot_tree(model, num_trees=tree_index, rankdir='LR')
-    plt.savefig(filename)
-    plt.close()
-    return filename
+    try:
+        n_trees = getattr(model, 'n_estimators', 1)
+        if tree_index < 0 or tree_index >= n_trees:
+            raise HTTPException(status_code=400, detail=f"tree_index mora biti med 0 in {n_trees - 1}")
+
+        plt.figure(figsize=(20, 10))
+        plot_tree(model, num_trees=tree_index)  #brez rankdir za združljivost
+        plt.savefig(filename)
+        plt.close()
+        return filename
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Napaka pri generiranju drevesa: {str(e)}")
+
 
 
 @app.get("/get_tree")
@@ -341,7 +346,6 @@ async def get_tree_simple(tree_index: int = 0):
     model = load_model()
     if model is None:
         raise HTTPException(status_code=404, detail="Model ni bil najden.")
-    
     filename = export_tree_to_png(model, tree_index=tree_index)
     return FileResponse(path=filename, filename="xgb_tree.png", media_type='image/png')
 
