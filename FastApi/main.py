@@ -320,12 +320,21 @@ async def download_model():
         raise HTTPException(status_code=404, detail=f"Datoteka '{filename}' ni bila najdena.")
 
 
-def export_tree_to_png(model, tree_index=0, filename="xgb_tree.png"):
+def export_tree_to_png(model, tree_index=0, filename="/tmp/xgb_tree.png"):
+    import matplotlib
+    matplotlib.use('Agg')
+    import matplotlib.pyplot as plt
+    from xgboost import plot_tree
+
+    if tree_index < 0 or tree_index >= model.n_estimators:
+        raise HTTPException(status_code=400, detail=f"tree_index mora biti med 0 in {model.n_estimators - 1}")
+    
     plt.figure(figsize=(20, 10))
-    plot_tree(model, num_trees=tree_index, rankdir='LR')  #horizontalno drevo
+    plot_tree(model, num_trees=tree_index, rankdir='LR')
     plt.savefig(filename)
     plt.close()
     return filename
+
 
 @app.get("/get_tree")
 async def get_tree_simple(tree_index: int = 0):
