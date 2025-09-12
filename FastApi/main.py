@@ -67,13 +67,16 @@ def save_data(df, filename=DATA_PATH):
     df.to_csv(filename, index=False)
     print(f"Podatki shranjeni v {filename}")
 
+
 def load_model():
     if os.path.exists(MODEL_PATH):
-        return joblib.load(MODEL_PATH)
+        model = XGBClassifier()
+        model.load_model(MODEL_PATH)
+        return model
     return None
 
 def save_model(model):
-    joblib.dump(model, MODEL_PATH)
+    model.save_model(MODEL_PATH)    
     print(f"Model shranjen v {MODEL_PATH}")
 
 #--- Data Processing ---
@@ -322,22 +325,23 @@ async def download_model():
 
 def export_tree_to_png(model, tree_index=0, filename="/tmp/xgb_tree.png"):
     import matplotlib
-    matplotlib.use('Agg')
+    matplotlib.use("Agg")
     import matplotlib.pyplot as plt
-    from xgboost import plot_tree
 
-    try:
-        n_trees = getattr(model, 'n_estimators', 1)
-        if tree_index < 0 or tree_index >= n_trees:
-            raise HTTPException(status_code=400, detail=f"tree_index mora biti med 0 in {n_trees - 1}")
+    booster = model.get_booster()
+    n_trees = len(booster.get_dump())
 
-        plt.figure(figsize=(20, 10))
-        plot_tree(model, num_trees=tree_index)  #brez rankdir za združljivost
-        plt.savefig(filename)
-        plt.close()
-        return filename
-    except Exception as e:
-        raise HTTPException(status_code=500, detail=f"Napaka pri generiranju drevesa: {str(e)}")
+    if tree_index < 0 or tree_index >= n_trees:
+        raise HTTPException(
+            status_code=400,
+            detail=f"tree_index mora biti med 0 in {n_trees - 1}"
+        )
+
+    plt.figure(figsize=(20, 10))
+    plot_tree(model, num_trees=tree_index, rankdir="LR")
+    plt.savefig(filename)
+    plt.close()
+    return filename
 
 
 
@@ -347,7 +351,8 @@ async def get_tree_simple(tree_index: int = 0):
     if model is None:
         raise HTTPException(status_code=404, detail="Model ni bil najden.")
     filename = export_tree_to_png(model, tree_index=tree_index)
-    return FileResponse(path=filename, filename="xgb_tree.png", media_type='image/png')
+    return FileResponse(path=filename, filename="xgb_tree.png", media_type="image/png")
+
 
 if __name__ == "__main__":
     import uvicorn
