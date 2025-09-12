@@ -318,15 +318,6 @@ async def download_model():
         return FileResponse(path=filename, filename="download.pkl", media_type='application/octet-stream')
     except Exception:
         raise HTTPException(status_code=404, detail=f"Datoteka '{filename}' ni bila najdena.")
-      
-@app.get("/get_tree")
-async def get_tree_simple(tree_index: int = 0):
-    model = load_model()
-    if model is None:
-        raise HTTPException(status_code=404, detail="Model ni bil najden.")
-    
-    filename = export_tree_to_png(model, tree_index=tree_index)
-    return FileResponse(path=filename, filename="xgb_tree.png", media_type='image/png')
 
 
 def export_tree_to_png(model, tree_index=0, filename="xgb_tree.png"):
@@ -336,6 +327,14 @@ def export_tree_to_png(model, tree_index=0, filename="xgb_tree.png"):
     plt.close()
     return filename
 
+@app.get("/get_tree")
+async def get_tree_simple(tree_index: int = 0):
+    model = load_model()
+    if model is None:
+        raise HTTPException(status_code=404, detail="Model ni bil najden.")
+    
+    filename = export_tree_to_png(model, tree_index=tree_index)
+    return FileResponse(path=filename, filename="xgb_tree.png", media_type='image/png')
 
 if __name__ == "__main__":
     import uvicorn
