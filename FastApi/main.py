@@ -3,13 +3,13 @@ import pandas as pd
 import joblib
 from supabase import create_client
 from dotenv import load_dotenv
-from xgboost import XGBClassifier
+from xgboost import XGBClassifier, plot_tree
 from sklearn.model_selection import train_test_split
 from sklearn.metrics import accuracy_score
 from fastapi import FastAPI, HTTPException
 from pydantic import BaseModel
 from fastapi.responses import FileResponse
-
+import matplotlib.pyplot as plt
 from datetime import datetime
 import pytz
 from fastapi.middleware.cors import CORSMiddleware
@@ -317,6 +317,27 @@ async def download_model():
         return FileResponse(path=filename, filename="download.pkl", media_type='application/octet-stream')
     except Exception:
         raise HTTPException(status_code=404, detail=f"Datoteka '{filename}' ni bila najdena.")
+      
+@app.get("/get_tree")
+async def get_tree_png(tree_index: int = 0):
+    model = load_model()
+    if model is None:
+        raise HTTPException(status_code=404, detail="Model ni bil najden. Najprej izvedite usposabljanje.")
+    try:
+        filename = export_tree_to_png(model, tree_index=tree_index, filename="xgb_tree.png")
+        return FileResponse(path=filename, filename="xgb_tree.png", media_type='image/png')
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Napaka pri izvozu drevesa: {str(e)}")
+
+def export_tree_to_png(model, tree_index=0, filename="xgb_tree.png"):
+    if model is None:
+        raise ValueError("Model ni naložen.")
+    
+    plt.figure(figsize=(20,10))
+    plot_tree(model, num_trees=tree_index, rankdir='LR')  #LR = horizontalno drevo
+    plt.savefig(filename)
+    plt.close()
+    return filename
 
 
 if __name__ == "__main__":
