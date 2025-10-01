@@ -1,0 +1,146 @@
+@import '../node_modules/bootstrap/dist/css/bootstrap.min.css';
+@import '../node_modules/bootstrap-icons/font/bootstrap-icons.min.css';
+
+/* Dark Theme - Elegantna Siva */
+.dark-theme {
+  --bs-body-color: #f0f0f0;  // Svetlo siva za tekst
+  --bs-body-bg: #1a1a1a;     // Temno siva osnova
+  --bs-tertiary-bg: #2a2a2a; // Srednje temna siva
+  --bs-primary: #7d7d7d;      // Srednje siva za poudarke
+  --bs-secondary: #4a4a4a;    // Temnejša siva
+  --bs-dark: #121212;         // Zelo temna siva
+  --bs-light: #3d3d3d;        // Svetlejša siva
+  --bs-red: #e90a0a; 
+  --bs-select: yellow;
+
+  .navbar {
+    background-color: var(--bs-dark) !important;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+    border-bottom: 1px solid #333;
+  }
+  
+  .dropdown-menu {
+    background-color: var(--bs-tertiary-bg);
+    border: 1px solid #444;
+  }
+
+  .nav-link, .navbar-brand {
+    color: var(--bs-body-color) !important;
+    &:hover {
+      color: var(--bs-primary) !important;
+    }
+  }
+
+  .dropdown-item {
+    color: var(--bs-body-color);
+    &:hover {
+      background-color: #333;
+      color: white;
+    }
+  }
+
+  .form-check-input {
+    background-color: #444;
+    border-color: #666;
+    &:checked {
+      background-color: var(--bs-primary);
+      border-color: var(--bs-primary);
+    }
+  }
+  
+  .btn-theme {
+    background-color: var(--bs-primary);
+    color: var(--bs-body-color);
+    border: 1px solid var(--bs-primary);
+    transition: background-color 0.3s, color 0.3s, border-color 0.3s;
+  }
+
+  .btn-theme:hover {
+    background-color: var(--bs-secondary);
+    border-color: var(--bs-secondary);
+    color: var(--bs-body-bg);
+  }
+
+  .nav-link.border {
+    border-color: var(--bs-primary) !important;
+  }
+
+
+}
+
+/* Light Theme - Svetla Siva */
+.light-theme {
+  --bs-body-color: #333333;   // Temno siva za tekst
+  --bs-body-bg: #ffffff;      // Zelo svetlo siva osnova
+  --bs-tertiary-bg: #e0e0e0;  // Srednje svetla siva
+  --bs-primary: #5a5a5a;      // Srednje siva
+  --bs-secondary: #9a9a9a;    // Svetlejša siva
+  --bs-dark: #d0d0d0;         // Zelo svetla siva
+  --bs-light: #ffffff;        // Bela
+  --bs-black: #000000;
+  --bs-select: #5a5a5a;
+
+
+  .navbar {
+    background-color: var(--bs-dark) !important;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    border-bottom: 1px solid #ccc;
+  }
+  
+  .dropdown-menu {
+    background-color: var(--bs-light);
+    border: 1px solid #e0e0e0;
+  }
+
+  .nav-link, .navbar-brand {
+    color: var(--bs-black) !important;
+    &:hover {
+      color: var(--bs-body-color) !important;
+    }
+  }
+
+  .dropdown-item {
+    color: var(--bs-body-color);
+    &:hover {
+      background-color: var(--bs-dark);
+      color: #222;
+    }
+  }
+
+  .form-check-input {
+    background-color: #e0e0e0;
+    border-color: #ccc;
+    &:checked {
+      background-color: var(--bs-primary);
+      border-color: var(--bs-primary);
+    }
+  }
+
+  .btn-theme {
+    background-color: var(--bs-primary);
+    color: var(--bs-body-color);
+    border: 1px solid var(--bs-primary);
+    transition: background-color 0.3s, color 0.3s, border-color 0.3s;
+  }
+
+  .btn-theme:hover {
+    background-color: var(--bs-secondary);
+    border-color: var(--bs-secondary);
+    color: var(--bs-body-bg);
+  }
+
+  .nav-link.border {
+    border-color: var(--bs-primary) !important;
+  }
+
+
+}
+
+body {
+  transition: all 0.3s ease;
+  padding-top: 90px;
+}
+
+td,  tr {
+  text-align: center; 
+}

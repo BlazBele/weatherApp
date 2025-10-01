@@ -1,0 +1,70 @@
+<nav class="navbar navbar-expand-lg bg-body-tertiary fixed-top">
+  <div class="container-fluid">
+    <a href="/" class="nav-link fw-semibold">Postaja Straža</a>
+
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+            data-bs-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent"
+            aria-expanded="false"
+            aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <!--Leva stran: navigacija -->
+      <ul class="navbar-nav">
+        <li class="nav-item">
+          <a routerLink="/" class="nav-link active" (click)="closeMenu()" aria-current="page"></a>
+        </li>
+        <li class="nav-item" *ngIf="isLoggedIn">
+          <a routerLink="/admin" class="nav-link no-padding" (click)="closeMenu()" style="cursor: pointer;">{{'admin' | translate}}</a>          
+        </li>
+      </ul>
+
+      
+      <!--Desna stran: dark mode + jezik-->
+      <div class="d-flex align-items-center ms-auto gap-3">
+        <div class="mb-2 mb-lg-0">
+          <a routerLink="/video" class="bi bi-camera fs-4 text-danger" (click)="closeMenu()" aria-label="Video kamera"></a>
+        </div>
+        <ul class="navbar-nav d-flex flex-row align-items-center">
+          <li class="nav-item" *ngIf="!isLoggedIn">
+            <button type="button" class="btn btn-primary btn-sm no-padding" routerLink="/login" (click)="logout()">{{'login' | translate}}</button>
+          </li>
+          <li class="nav-item" *ngIf="isLoggedIn">
+            <button type="button" class="btn btn btn-sm btn-primary no-padding" (click)="logout()">{{ 'logout' | translate}}</button>
+          </li>
+        </ul>
+
+        <!-- Dark/Light Toggle -->
+        <div class="form-check form-switch">
+          <input class="form-check-input" type="checkbox" role="switch" id="themeToggle"
+                [checked]="isDarkMode" (change)="themeService.toggleTheme()">
+          <label class="form-check-label ms-1" for="themeToggle">
+            <i [class]="isDarkMode ? 'bi bi-moon-fill' : 'bi bi-sun-fill'"></i>
+          </label>
+        </div>
+
+        <!-- Language Selector -->
+        <div class="nav-item dropdown" id="flag-wrapper">
+          <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+            <img *ngIf="selectedLanguage.flag" [src]="selectedLanguage.flag" alt="Flag" class="flag">
+            {{ selectedLanguage.shortName }}
+          </a>
+          <ul class="dropdown-menu dropdown-menu-end">
+            <li *ngFor="let lang of languageMap | keyvalue">
+              <a class="dropdown-item d-flex align-items-center gap-2"
+                [class.selected]="selectedLanguage.name === lang.value.name"
+                (click)="selectLanguage(lang.key)">
+                <img [src]="lang.value.flag" class="flag" />
+                <span>{{ lang.value.name }}</span>
+              </a>
+            </li>
+          </ul>
+        </div>
+
+      </div>
+
+    </div>
+  </div>
+</nav>

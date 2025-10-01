@@ -1,0 +1,33 @@
+<!-- trend-indicator.component.html -->
+<div class="d-flex flex-column align-items-center" [style.width.px]="size">
+  <svg [attr.width]="size" [attr.height]="size * 0.6" viewBox="0 0 210 110" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <defs>
+      <linearGradient id="paint0_linear_6_32" x1="201.5" y1="50.5" x2="8" y2="50.5" gradientUnits="userSpaceOnUse">
+        <stop stop-color="#FF0046"/>
+        <stop offset="1" stop-color="#0064FF"/>
+      </linearGradient>
+      <clipPath id="clip0_6_32">
+        <rect width="209" height="99" fill="currentColor"/>
+      </clipPath>
+    </defs>
+
+    <g clip-path="url(#clip0_6_32)">
+      <!-- Glavna krivulja -->
+      <path #mainPath d="M8 87C8 87 24 14 104.75 14C185.5 14 201.5 87 201.5 87"
+            stroke="url(#paint0_linear_6_32)" stroke-width="15" stroke-linecap="round"/>
+      
+      <!-- Krogec, ki sledi krivulji -->
+      <circle [attr.cx]="circleX" [attr.cy]="circleY" r="7" fill="currentColor" />
+
+      <!-- Min text -->
+      <text x="35" y="95" fill="currentColor" font-size="12" font-weight="bold" text-anchor="start">{{ dailyMin }} {{ unit }}</text>
+
+      <!-- Max text -->
+      <text x="173" y="95" fill="currentColor" font-size="12" font-weight="bold" text-anchor="end">{{ dailyMax }} {{ unit }}</text>
+
+      <path *ngIf="trend === 'up'" d="M105 32L109.33 39.5H100.67L105 32Z" fill="#FF0046"/>
+      <path *ngIf="trend === 'down'" d="M105 42L100.67 34.5H109.33L105 42Z" fill="#0064FF"/>
+
+    </g>
+  </svg>
+</div>

@@ -1,0 +1,49 @@
+<div class="container">
+  <h1 class="mb-5">{{'pressure' | translate }}</h1>
+  <div class="pressure-container" style="height: 400px; width: 100%;">
+    <div class="mb-3 d-flex align-items-center">
+      <h3>{{ 'pickPeriod' | translate }}: &nbsp;</h3>
+      <select id="periodSelect" class="form-select w-auto" [(ngModel)]="selectedPeriod" (change)="onPeriodChange()">
+        <option value="day">{{ 'day' | translate }}</option>
+        <option value="week">{{ 'week' | translate }}</option>
+        <option value="month">{{ 'month' | translate }}</option>
+        <option value="6months">{{ '6month' | translate }}</option>
+        <option value="year">{{ 'year' | translate }}</option>
+        <option value="custom">{{ 'customPeriod' | translate }}</option>
+      </select>
+    </div>
+
+    <div *ngIf="selectedPeriod === 'day'" class="mb-3 d-flex align-items-center">
+      <input id="dayPicker" type="date" class="form-control w-auto" [max]="today" [ngModel]="selectedDate" (ngModelChange)="onDateChange($event)" />
+      <button type="button" class="btn btn-outline-primary ms-2" (click)="setToday()" [disabled]="selectedDate === today">{{ 'today' | translate }}</button>
+    </div>
+
+    <div *ngIf="selectedPeriod === 'custom'" class="mb-3 d-flex align-items-center flex-wrap gap-2">
+      <label class="form-label mb-0 d-inline me-1">{{ 'from' | translate }}</label>
+      <input type="date" class="form-control w-auto" [(ngModel)]="customStartDate" [max]="today" />
+      
+      <label class="form-label mb-0 d-inline ms-2 me-1">{{ 'to' | translate }}</label>
+      <input type="date" class="form-control w-auto" [(ngModel)]="customEndDate" [max]="today" />
+      
+      <button type="button" class="btn btn-primary ms-2" (click)="loadCustomRange()" [disabled]="!customStartDate || !customEndDate">{{'show' | translate}}</button>
+    </div>
+    
+    <div class="stats">
+        <span class="me-3">Min: {{ min !== null ? min.toFixed(1) + ' hPa' : '–' }}</span>
+        <span class="me-3">{{minDate}}</span>
+    </div>
+    <div class="stats">
+      <span class="me-3">Max: {{ max !== null ? max.toFixed(1) + ' hPa' : '–' }}</span>
+      <span class="me-3">{{maxDate}}</span>
+    </div>
+    <span class="me-3">Avg: {{ avg !== null ? avg.toFixed(1) + ' hPa': '-'}}</span>
+
+    <canvas baseChart
+            [data]="lineChartData"
+            [options]="lineChartOptions"
+            type="line"
+            class="w-100"
+            style="max-height: 400px;">
+    </canvas>
+  </div>
+</div>

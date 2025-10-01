@@ -1,0 +1,36 @@
+<svg width="175" height="187" viewBox="-10 -5 192 200" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Krogi -->
+  <circle *ngFor="let r of [59,53,43,40,31,27,25,22,20,18,16]" 
+          [attr.r]="r" cx="87.5" cy="93.5" stroke="currentColor" />
+
+  <!-- Puščica -->
+  <path d="M79.5 85L13 93L79.5 101L87.5 168L95.5 101L162 93L95.5 85L87.5 19L79.5 85Z" fill="#00B2FF" stroke="black" />
+
+  <!-- Oznake -->
+<g [attr.transform]="rotation">
+
+  <g [attr.transform]="reverseRotation[0]">
+    <rect x="77.5" y="-7" width="20" height="20"/>
+    <text x="87.5" y="3" font-size="12" font-family="Arial"
+          fill="currentColor" text-anchor="middle" dominant-baseline="middle">{{ 'wind_direction_short.S' | translate}}</text>
+  </g>
+
+  <g [attr.transform]="reverseRotation[1]">
+    <rect x="77.5" y="173" width="20" height="20"/>
+    <text x="87.5" y="183" font-size="12" font-family="Arial"
+          fill="currentColor" text-anchor="middle" dominant-baseline="middle">{{ 'wind_direction_short.J' | translate}}</text>
+  </g>
+  <g [attr.transform]="reverseRotation[2]">
+    <rect x="166" y="84.5" width="20" height="20"/>
+    <text x="176" y="94.5" font-size="12" font-family="Arial"
+          fill="currentColor" text-anchor="middle" dominant-baseline="middle">{{ 'wind_direction_short.V' | translate}}</text>
+  </g>
+
+  <g [attr.transform]="reverseRotation[3]">
+    <rect x="-10" y="84.5" width="20" height="20"/>
+    <text x="0" y="94.5" font-size="12" font-family="Arial"
+          fill="currentColor" text-anchor="middle" dominant-baseline="middle">{{ 'wind_direction_short.Z' | translate}}</text>
+  </g>
+</g>
+
+</svg>

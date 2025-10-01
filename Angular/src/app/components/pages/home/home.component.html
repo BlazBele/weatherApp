@@ -1,0 +1,140 @@
+<div class="container">
+  <div class="row g-3  border border-3 rounded p-3 mx-0">
+    <div class="d-flex justify-content-end align-items-start w-100">
+      <p class="me-2">
+        {{ 'updated' | translate }}: {{ weather.created_at }}
+      </p>
+    </div>
+
+    <div class="col-12 col-md mb-3 mb-md-0">
+        <a href="/temperature">
+        <div class="card h-100">
+          <div class="card-body">
+              <div class="d-flex flex-column align-items-center">
+                <app-trend-indicator
+                [currentValue]="weather.temperature"
+                [previousValue]="weather.previous_temperature || 0"
+                [dailyMin]="weather.daily_min_temperature ?? 0"
+                [dailyMax]="weather.daily_max_temperature ?? 30"
+                unit="°C"
+                [size]="300">
+              </app-trend-indicator>
+            </div>
+            <h5 class="card-title">{{ 'temperature' | translate }}</h5>
+            <p class="card-text">{{ weather.temperature }} °C</p>
+          </div>
+        </div>
+      </a>
+    </div>
+
+    <div class="col-12 col-md mb-3 mb-md-0">
+      <a href="/humidity">
+        <div class="card h-100">
+          <div class="card-body">
+            <div class="d-flex flex-column align-items-center">
+              <app-trend-indicator
+                [currentValue]="weather.humidity"
+                [previousValue]="weather.previous_humidity || 0"
+                [dailyMin]="weather.daily_min_humidity ?? 0"
+                [dailyMax]="weather.daily_max_humidity ?? 100"
+                unit="%"
+                [size]="300">
+              </app-trend-indicator>
+            </div>
+            <h5 class="card-title">{{ 'humidity' | translate }}</h5>
+            <p class="card-text">{{ weather.humidity }} %</p>
+          </div>
+        </div>
+      </a>
+    </div>
+
+    <div class="col-12 col-md mb-3 mb-md-0">
+      <a href="/pressure">
+        <div class="card h-100">
+          <div class="card-body">
+            <div class="d-flex flex-column align-items-center">
+              <app-trend-indicator
+              [currentValue]="weather.pressure0"
+              [previousValue]="weather.previous_pressure0 || 0"
+              [dailyMin]="weather.daily_min_pressure0 ?? 1000"
+              [dailyMax]="weather.daily_max_pressure0 ?? 1040"
+              unit="hPa"
+              [size]="300">
+            </app-trend-indicator>
+          </div>
+          <h5 class="card-title">{{ 'pressure' | translate }}</h5>
+          <p class="card-text">{{ weather.pressure0 }} hPa</p>
+        </div>
+      </div>
+      </a>
+    </div>
+    
+  </div>
+
+  <div class="row g-3 mt-1 mt-lg-3 ">
+    <div class="col-12 col-xl-8 mb-3 mb-lg-0">
+      <div class="border border-3 rounded p-4 h-100">
+        <div class="d-flex justify-content-end align-items-start mb-3 w-100 " style="min-height: 2em;">
+          <span class="me-2" *ngIf="weather.timestamp">
+            {{ 'updated' | translate }}: {{ weather.timestamp }}
+          </span>
+          <button class="bi bi-arrow-repeat btn-sm rounded" (click)="refreshWindData()"></button>
+        </div>
+
+        <div class="row g-3">
+          <div class="col-12 col-md mb-3 mb-md-0">
+            <a href="/windSpeed">
+            <div class="card h-100">
+              <div class="card-body">
+                <div class="d-flex flex-column align-items-center">
+                  <app-trend-indicator
+                    [currentValue]="weather.wind_speed"
+                    [previousValue]="weather.previous_wind_speed || 0"
+                    [dailyMin]="weather.daily_min_wind_speed ?? 0"
+                    [dailyMax]="weather.daily_max_wind_speed ?? 30"
+                    unit="m/s"
+                    [size]="300">
+                  </app-trend-indicator>
+                </div>
+                <h5 class="card-title">{{ 'windSpeed' | translate }}</h5>
+                <p class="card-text">{{ weather.wind_speed }} m/s</p>
+              </div>
+            </div>
+            </a>
+          </div>
+
+          <div class="col-12 col-md mb-3 mb-md-0">
+            <div class="card h-100">
+              <div class="card-body pt-0">
+                <app-compass [direction]="weather.wind_direction"></app-compass>
+                <h5 class="card-title">{{ 'windDirection' | translate }}</h5>
+                <p class="card-text">{{ ('wind_direction.' + weather.wind_direction) | translate }}</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <div class="col-12 col-xl-4">
+    <div class="border border-3 rounded p-4 d-flex flex-column h-100">
+      <div class="d-flex justify-content-end align-items-start">
+        <span class="me-2" *ngIf="rainPrediction">
+          {{ 'updated' | translate }}: {{ rainPrediction.timestamp }}
+        </span>
+        <button class="bi bi-arrow-repeat btn-sm rounded" (click)="refreshRainPrediction()"></button>
+      </div>
+
+      <div class="card mt-3 flex-grow-1">
+        <div class="card-body">
+          <h5 class="card-title">{{ 'RainPrediction3' | translate}}</h5>
+          <br>
+
+          <p class="card-text">{{ rainPrediction?.prediction ? ('rainFalse' | translate) : ('rainTrue' | translate) }}</p>
+          <p class="card-text">{{ 'probability' | translate }}: {{rainPrediction?.probability}}%</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>

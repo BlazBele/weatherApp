@@ -1,0 +1,65 @@
+{
+  "login": "Prijava",
+  "logout": "Odjava",
+  "password": "Geslo",
+  "adminOnly": "Prijava za administratorja",
+  "invalidCredentials": "Neveljavni podatki.",
+  "accessDenied": "Dostop zavrnjen. Samo za administratorje.",
+  "admin": "Administrator",
+  "home": "Domov",
+  "temperature": "Temperatura",
+  "humidity": "Vlažnost",
+  "pressure": "Pritisk",
+  "windSpeed": "Hitrost vetra",
+  "windDirection": "Smer vetra",
+  "updated": "Posodobljeno",
+  "sort": "Razvrsti po",
+  "rain": "Deževalo?",
+  "date": "Datum",
+  "edit": "Uredi",
+  "delete": "Izbriši",
+  "id": "ID",
+
+  "yes": "Da",
+  "no": "Ne",
+
+  "cancel": "Prekliči",
+  "saveChanges": "Shrani spremembe",
+
+  "first": "Prva",
+  "previous": "Prejšnja",
+  "next": "Naslednja",
+  "last": "Zadnja",
+
+  "wind_direction": {
+    "S": "Sever",
+    "J": "Jug",
+    "V": "Vzhod",
+    "Z": "Zahod",
+    "SZ": "Severozahod",
+    "SV": "Severovzhod",
+    "JV": "Jugovzhod",
+    "JZ": "Jugozahod"
+  },
+  "wind_direction_short": {
+    "S": "S",
+    "J": "J",
+    "V": "V",
+    "Z": "Z",
+    "SZ": "SZ",
+    "SV": "SV",
+    "JV": "JV",
+    "JZ": "JZ"
+  },
+
+  "nOfRowsExport": "Število vrstic za izvoz",
+  "nOfRows": "Število vrstic",
+  "exportData": "Izvoz Podatkov",
+  "selectColumns": "Izbrani stolpci",
+  "all": "Vse",
+  "probability": "Verjetnost",
+  "RainPrediction3": "Ali bo padal dež čez 3 ure?",
+  "rainTrue" : "Dežja ne bo!",
+  "rainFalse" : "Dež bo padal!"
+
+}
